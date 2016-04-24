@@ -20,6 +20,9 @@
   "homepage": "https://github.com/rgrannell1/cprobe#readme",
   "dependencies": {
     "docopt": "^0.6.2",
-    "is": "github:rgrannell1/is"
+    "is": "github:rgrannell1/is",
+    "request": "^2.72.0",
+    "ssh-url": "^0.1.5",
+    "ssh2": "^0.5.0"
   }
 }
