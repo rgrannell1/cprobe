@@ -1,0 +1,25 @@
+{
+  "name": "cprobe",
+  "version": "0.1.0",
+  "description": "",
+  "author": "Ryan Grannell <r.grannell2@gmail.com>",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "cprobe": "src/cli/cprobe.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgrannell1/cprobe.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rgrannell1/cprobe/issues"
+  },
+  "homepage": "https://github.com/rgrannell1/cprobe#readme",
+  "dependencies": {
+    "docopt": "^0.6.2",
+    "is": "github:rgrannell1/is"
+  }
+}
