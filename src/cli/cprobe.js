@@ -16,11 +16,12 @@ const docs = `
 Name:
 	cprobe — monitor the connection status to a URL.
 Usage:
-	cprobe <url>...
+	cprobe [-l <LABEL> | --label <LABEL>] <url>...
 	cprobe (-h | --help | --version)
 Description:
 	*
 Options:
+	-l <LABEL>, --label <LABEL>    A label to display. Defaults to the provided URLs.
 	-h, --help    Display this documentation.
 	--version     Display the package version.
 Arguments:
