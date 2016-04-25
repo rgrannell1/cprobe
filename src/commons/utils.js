@@ -44,6 +44,21 @@ utils.tabulate = elems => {
 
 utils.pluck = (key, coll) => coll.map(elem => elem[key])
 
+utils.partition = (fn, coll) => {
+
+	var table = { }
+
+	coll.forEach(elem => {
+
+		const key  = fn(elem)
+		table[key] = (table[key] || [ ]).concat(elem)
+
+	})
+
+	return table
+
+}
+
 
 
 module.exports = utils

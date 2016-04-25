@@ -39,30 +39,21 @@ const summariseResponses = responses => {
 
 	Object.keys(windows).forEach(interval => {
 
-		const summary = { }
-		const window  = windows[interval]
+		summaries[interval] = { }
 
-		Object.keys(windows).forEach(interval => {
+		Object.keys(windows[interval]).forEach(id => {
 
-			summary[interval] = { }
+			const timeWindow   = windows[interval][id]
+			const successCount = timeWindow.filter(response => {
+				return response.event === constants.events.connSuccess
+			}).length
 
-			Object.keys(windows[interval]).forEach(id => {
-
-				const timeWindow   = windows[interval][id]
-				const successCount = timeWindow.filter(response => {
-					return response.event === constants.events.connSuccess
-				}).length
-
-				summary[interval][id] = {
-					sucessPercentage: successCount / timeWindow.length,
-					statuses:         utils.tabulate(timeWindow.map(response => response.info.status))
-				}
-
-			})
+			summaries[interval][id] = {
+				successPercentage: successCount / timeWindow.length,
+				statuses:         utils.tabulate(timeWindow.map(response => response.info.status))
+			}
 
 		})
-
-		summaries[interval] = summary
 
 	})
 
@@ -70,13 +61,57 @@ const summariseResponses = responses => {
 
 }
 
-const getResponseStats = responses => {
+const extractUrls = responses => {
 
-	const windows = summariseResponses(responses)
+	const urls    = { }
+	const matched = new Set( )
 
-	console.log( JSON.stringify(windows, null, 4) )
+	Object.keys(responses.urls).forEach(id => {
+
+		responses.urls[id].forEach(response => {
+
+			const url = response.url
+
+			if (!matched.has(url.id)) {
+				urls[url.id] = url
+			}
+
+		})
+
+	})
+
+	return urls
 
 }
+
+const displayStats = (responses, stats) => {
+
+	const urls = extractUrls(responses)
+
+	Object.keys(stats).forEach(interval => {
+		Object.keys(stats[interval]).forEach(id => {
+
+			const url      = urls[id]
+			const urlStats = stats[interval][id]
+
+			console.log(url.url)
+			console.log(`${urlStats.successPercentage * 100}%`)
+			console.log('')
+
+		})
+	})
+
+}
+
+const getResponseStats = responses => {
+	displayStats(responses, summariseResponses(responses))
+}
+
+
+
+
+
+
 
 const processResponse = (event, response) => {
 	return processResponse[response.url.protocol](event, response)
