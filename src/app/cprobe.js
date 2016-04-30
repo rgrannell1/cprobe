@@ -4,10 +4,13 @@
 
 
 
-const parseUrl           = require('../app/parse-url')
-const testUrlStatuses    = require('../app/test-url-statuses')
 const constants          = require('../commons/constants')
-const monitorUrls        = require('../app/monitor-urls')
+const displayStats       = require('../app/display-stats')
+const extractResponseStats      = require('../app/response-stats')
+const parseUrl           = require('../app/parse-url')
+const summariseResponses = require('../app/summarise-responses')
+const testUrlStatuses    = require('../app/test-url-statuses')
+const utils              = require('../commons/utils')
 
 
 
@@ -23,7 +26,27 @@ const cprobe = rawArgs => {
 		process.exit(0)
 	}
 
-	return monitorUrls(connStatuses)
+	const responseStats  = [ ]
+	const responseStatuses = [
+		constants.events.connSuccess,
+		constants.events.connFailure
+	]
+
+	// store any response data for succeeded / failed responses.
+
+	responseStatuses.forEach(event => {
+
+		connStatuses.on(event, response => {
+
+			responseStats.push(extractResponseStats(event, response))
+
+			displayStats.success(summariseResponses(responseStats))
+
+		})
+
+	})
+
+	return connStatuses
 
 }
 
