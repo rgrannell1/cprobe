@@ -17,6 +17,9 @@ responseStats.http = (event, response) => {
 		url:  response.url,
 		time:    response.time,
 		metrics: {
+			responseTime: response.res
+				? response.res.responseTime
+				: null,
 			status:     response.res
 				? response.res.statusCode
 				: null,
