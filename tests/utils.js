@@ -12,9 +12,9 @@ const express   = require('express')
 
 
 
-const testServers = { }
+const mockServers = { }
 
-testServers.http = port => {
+mockServers.http = port => {
 
 	return new Promise((resolve, reject) => {
 
@@ -28,11 +28,11 @@ testServers.http = port => {
 
 }
 
-const testApp = { }
+const cprobeTestApp = { }
 
-testApp.http = (port, onSummary) => {
+cprobeTestApp.http = (port, onSummary) => {
 
-	testServers.http(port)
+	mockServers.http(port)
 	.then(
 		port => {
 
@@ -52,7 +52,7 @@ testApp.http = (port, onSummary) => {
 
 }
 
-testApp.ssh = (port, onSummary) => {
+cprobeTestApp.ssh = (port, onSummary) => {
 
 }
 
@@ -60,5 +60,5 @@ testApp.ssh = (port, onSummary) => {
 
 
 module.exports = {
-	testApp
+	cprobeTestApp
 }
