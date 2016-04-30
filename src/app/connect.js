@@ -47,9 +47,7 @@ connect.ssh = connData => {
 
 		conn
 		.on('ready', ( ) => {
-			resolve({
-
-			})
+			resolve( )
 		})
 		.on('error', reject)
 		.connect({
