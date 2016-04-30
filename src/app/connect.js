@@ -53,6 +53,7 @@ connect.ssh = connData => {
 			})
 		})
 		.on('error', err => {
+			console.log(err)
 			reject(err)
 		})
 		.connect({
