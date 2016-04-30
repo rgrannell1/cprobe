@@ -5,22 +5,10 @@
 
 
 
+const displayStats       = require('../app/display-stats')
 const summariseResponses = require('../app/summarise-responses')
 const constants          = require('../commons/constants')
 const utils              = require('../commons/utils')
-
-
-
-
-
-
-const displayStats = { }
-
-displayStats.json = (responses, stats) => {
-	console.log(
-		JSON.stringify(stats, null, 4)
-	)
-}
 
 
 
@@ -70,7 +58,7 @@ const monitorConnections = connStatuses => {
 
 			responses.push(processResponse(event, response))
 
-			displayStats.json(responses, summariseResponses(responses))
+			displayStats.success(summariseResponses(responses))
 
 		})
 

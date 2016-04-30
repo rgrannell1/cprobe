@@ -12,11 +12,6 @@ const utils     = require('../commons/utils')
 
 
 
-
-/*
-	for each response,
-*/
-
 const assignTimeInterval = (intervals, response) => {
 
 	const currentTime    = Date.now( )
@@ -54,7 +49,6 @@ summariseResponses.stats.successPercentage = responses => {
 
 
 
-
 const summariseTimeInterval = (responses) => {
 
 	// add a 30s ago, 1m ago, ... label to the responses.
@@ -73,7 +67,7 @@ const summariseTimeInterval = (responses) => {
 				.unzipKeys( )
 				.map( ([interval, responses]) => ({
 				 	interval,
-				 	summary: summariseResponses(responses)
+				 	stats: summariseResponses(responses)
 				}) )
 
 			return {

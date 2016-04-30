@@ -4,7 +4,23 @@
 
 
 
+
+const constants = require('../commons/constants')
+
+
+
+
+
 const utils = {
+	terminal: { }
+}
+
+utils.terminal.eraseLines = count => {
+
+	for (var ith = 0; ith < count; ++ith) {
+		process.stderr.write(constants.escapeSequences.lineUp)
+		process.stderr.write(constants.escapeSequences.lineDelete)
+	}
 
 }
 

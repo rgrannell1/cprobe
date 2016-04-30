@@ -5,6 +5,10 @@
 
 
 var constants = {
+	escapeSequences: {
+		lineUp:     '\x1b[A',
+		lineDelete: '\x1b[K'
+	},
 	events: {
 		connSuccess: 'connSuccess',
 		connFailure: 'connFailure'
