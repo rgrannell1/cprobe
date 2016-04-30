@@ -1,5 +1,5 @@
 
-# cprobe
+# cprobe [![Build Status](https://travis-ci.org/rgrannell1/polonium.png?branch=master)](https://travis-ci.org/rgrannell1/polonium)
 
 cprobe is a primarily interactive tool for testing connections to provided URLs. Its envisaged uses are to:
 
