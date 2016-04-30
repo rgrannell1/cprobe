@@ -15,31 +15,57 @@ const constants = require('../commons/constants')
 
 
 
-const testUrlStatus = (args, emitter, url) => {
+const connHandlers = { }
 
-	// TODO make protocol specific?
+connHandlers.http = { }
+connHandlers.ssh  = { }
+
+connHandlers.http.resolve = (emitter, url, {res, body}) => {
+	emitter.emit(constants.events.connSuccess, {
+		url, res, body, time: Date.now( )
+	})
+}
+
+connHandlers.http.reject = (emitter, url, err) => {
+	emitter.emit(constants.events.connFailure, {
+		url, err, time: Date.now( )
+	})
+}
+
+connHandlers.https = connHandlers.http
+
+connHandlers.ssh.resolve = (emitter, url) => {
+	emitter.emit(constants.events.connSuccess, {
+		url, time: Date.now( )
+	})
+}
+
+connHandlers.ssh.reject = (emitter, url, err) => {
+	emitter.emit(constants.events.connFailure, {
+		url, err, time: Date.now( )
+	})
+}
+
+
+
+
+
+const testUrlStatus = (args, emitter, url) => {
 
 	setInterval(( ) => {
 
 		const connPromise = connect[url.protocol](url)
 
 		connPromise.then(
-			({res, body}) => {
-				emitter.emit(constants.events.connSuccess, {
-					url, res, body, time: Date.now( )
-				})
-			},
-			err => {
-				emitter.emit(constants.events.connFailure, {
-					url, err, time: Date.now( )
-				})
-			})
-			.catch(err => {
+			connHandlers[url.protocol].resolve.bind({ }, emitter, url),
+			connHandlers[url.protocol].reject .bind({ }, emitter, url)
+		)
+		.catch(err => {
 
-				console.error(`internal error: ${err.stack}`)
-				process.exit(1)
+			console.error(`internal error: ${err.stack}`)
+			process.exit(1)
 
-			})
+		})
 
 	}, args.interval)
 
