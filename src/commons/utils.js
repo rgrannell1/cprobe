@@ -15,6 +15,18 @@ const utils = {
 	terminal: { }
 }
 
+utils.percentify = num => {
+	return Math.floor(num * 100) + '%'
+}
+
+utils.displayTime = seconds => {
+
+	return seconds < constants.units.secondsPerMinute
+		? seconds + 's'
+		: Math.floor(seconds / constants.units.secondsPerMinute) + 'm'
+
+}
+
 utils.terminal.eraseLines = count => {
 
 	for (var ith = 0; ith < count; ++ith) {

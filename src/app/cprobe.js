@@ -30,8 +30,9 @@ const cprobe = rawArgs => {
 cprobe.preprocess = rawArgs => {
 
 	return {
-		urls:    cprobe.preprocess.urls(rawArgs['<url>']),
-		version: rawArgs['--version']
+		urls:     cprobe.preprocess.urls(rawArgs['<url>']),
+		interval: cprobe.preprocess.interval(rawArgs['--interval']),
+		version:  rawArgs['--version']
 	}
 
 }
@@ -41,6 +42,11 @@ cprobe.preprocess.urls = urls => {
 		return Object.assign(parseUrl(url), {id: ith})
 	})
 }
+
+cprobe.preprocess.interval = interval => {
+	return parseInt(interval, 10) * constants.units.millisecondsPerSecond
+}
+
 
 
 

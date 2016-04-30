@@ -40,7 +40,7 @@ const probeUrls = (args, urls) => {
 					process.exit(1)
 				})
 
-		}, 3 * 1000)
+		}, args.interval)
 
 	})
 

@@ -13,13 +13,21 @@ var constants = {
 		connSuccess: 'connSuccess',
 		connFailure: 'connFailure'
 	},
+	intervals: [30, 60, 300, 600, 1800],
 	packageJson: require('../../package'),
 	regex: {
 		protocol: /^([a-z]+):[\/]{2}/
 	},
-	intervals: [30, 60, 300, 600, 1800],
+	threshholds: {
+		successPercentage: {
+			failure: 0,
+			warning: 0.95,
+			success: 1
+		}
+	},
 	units: {
-		millisecondsPerSecond: 1000
+		millisecondsPerSecond: 1000,
+		secondsPerMinute:      60
 	}
 }
 

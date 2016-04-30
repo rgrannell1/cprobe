@@ -5,7 +5,9 @@
 
 
 
+const colors    = require('colors')
 const utils     = require('../commons/utils')
+const constants = require('../commons/constants')
 
 
 
@@ -18,31 +20,58 @@ const displayStats = { }
 
 
 
-var previousLines = 0
+{
 
-displayStats.success = summaries => {
+	let previousLines = 0
 
-	const lines = [ ]
+	displayStats.success = urlSummaries => {
 
-	summaries.forEach(summary => {
+		const thresholdColours = [
+			{level: 'success', colour: 'green'},
+			{level: 'warning', colour: 'yellow'},
+			{level: 'failure', colour: 'red'}
+		]
 
-		const displayData = summary.summaries.map(intervalSummary => {
+		const displayLines = Array.prototype.concat.apply( [ ], urlSummaries.map(urlSummary => {
 
-			const percentage = Math.floor(intervalSummary.stats.successPercentage * 100)
+			const displayData = urlSummary.summaries
+				.map(timeData => {
 
-			return `${intervalSummary.interval}s ${percentage}%`
+					const date           = utils.displayTime(timeData.interval)
+					const successPercent = timeData.stats.successPercentage
 
-		}).join(' | ')
+					var successRate
 
-		lines.push(summary.url.url)
-		lines.push(`	${displayData}`)
+					for (let {level, colour} of thresholdColours) {
 
-	})
+						let colourThreshhold = constants.threshholds.successPercentage[level]
 
-	utils.terminal.eraseLines(previousLines)
+						if (successPercent >= colourThreshhold) {
+							successRate = utils.percentify(successPercent)[colour]
+							break
+						}
 
-	console.log(lines.join('\n'))
-	previousLines = lines.length
+					}
+
+					return `${date} ${successRate}`
+
+				})
+				.join(' | ')
+
+			return [
+				urlSummary.url.url,
+				`	${displayData}`
+			]
+
+		}) )
+
+		utils.terminal.eraseLines(previousLines)
+
+		console.log(displayLines.join('\n'))
+
+		previousLines = displayLines.length
+
+	}
 
 }
 
