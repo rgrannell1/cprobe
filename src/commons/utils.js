@@ -44,20 +44,38 @@ utils.tabulate = elems => {
 
 utils.pluck = (key, coll) => coll.map(elem => elem[key])
 
-utils.partition = (fn, coll) => {
 
-	var table = { }
 
-	coll.forEach(elem => {
 
-		const key  = fn(elem)
-		table[key] = (table[key] || [ ]).concat(elem)
 
-	})
+Object.defineProperty(Array.prototype, 'groupBy', {
+	enumerable: false,
+	value: function (fn) {
 
-	return table
+		var table = { }
 
-}
+		this.forEach(elem => {
+
+			const key  = fn(elem)
+			table[key] = (table[key] || [ ]).concat(elem)
+
+		})
+
+		return table
+
+	}
+})
+
+Object.defineProperty(Object.prototype, 'unzipKeys', {
+
+	enumerable: false,
+	value: function ( ) {
+		return Object.keys(this).map( key => [key, this[key]] )
+	}
+
+})
+
+
 
 
 

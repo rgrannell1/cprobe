@@ -23,7 +23,7 @@ const cprobe = rawArgs => {
 		process.exit(0)
 	}
 
-	monitorConnections(connStatuses)
+	return monitorConnections(connStatuses)
 
 }
 

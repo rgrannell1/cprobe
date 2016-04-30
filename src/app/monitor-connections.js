@@ -5,109 +5,22 @@
 
 
 
-const constants = require('../commons/constants')
-const utils     = require('../commons/utils')
+const summariseResponses = require('../app/summarise-responses')
+const constants          = require('../commons/constants')
+const utils              = require('../commons/utils')
 
 
 
 
 
-const bucketResponses = (intervals, responses) => {
 
-	const windows = { }
+const displayStats = { }
 
-	intervals.forEach(interval => {
-
-		windows[interval] = { }
-
-		Object.keys(responses.urls).forEach(url => {
-			windows[interval][url] = responses.urls[url].filter(response => {
-				return Date.now( ) - response.time
-			})
-		})
-
-	})
-
-	return windows
-
+displayStats.json = (responses, stats) => {
+	console.log(
+		JSON.stringify(stats, null, 4)
+	)
 }
-
-const summariseResponses = responses => {
-
-	const windows   = bucketResponses([30, 60, 300, 600, 1800], responses)
-	const summaries = { }
-
-	Object.keys(windows).forEach(interval => {
-
-		summaries[interval] = { }
-
-		Object.keys(windows[interval]).forEach(id => {
-
-			const timeWindow   = windows[interval][id]
-			const successCount = timeWindow.filter(response => {
-				return response.event === constants.events.connSuccess
-			}).length
-
-			summaries[interval][id] = {
-				successPercentage: successCount / timeWindow.length,
-				statuses:         utils.tabulate(timeWindow.map(response => response.info.status))
-			}
-
-		})
-
-	})
-
-	return summaries
-
-}
-
-const extractUrls = responses => {
-
-	const urls    = { }
-	const matched = new Set( )
-
-	Object.keys(responses.urls).forEach(id => {
-
-		responses.urls[id].forEach(response => {
-
-			const url = response.url
-
-			if (!matched.has(url.id)) {
-				urls[url.id] = url
-			}
-
-		})
-
-	})
-
-	return urls
-
-}
-
-const displayStats = (responses, stats) => {
-
-	const urls = extractUrls(responses)
-
-	Object.keys(stats).forEach(interval => {
-		Object.keys(stats[interval]).forEach(id => {
-
-			const url      = urls[id]
-			const urlStats = stats[interval][id]
-
-			console.log(url.url)
-			console.log(`${urlStats.successPercentage * 100}%`)
-			console.log('')
-
-		})
-	})
-
-}
-
-const getResponseStats = responses => {
-	displayStats(responses, summariseResponses(responses))
-}
-
-
 
 
 
@@ -143,7 +56,7 @@ processResponse.https = processResponse.http
 
 const monitorConnections = connStatuses => {
 
-	const responses  = {urls: { }}
+	const responses  = [ ]
 	const eventTypes = [
 		constants.events.connSuccess,
 		constants.events.connFailure
@@ -155,11 +68,9 @@ const monitorConnections = connStatuses => {
 
 		connStatuses.on(event, response => {
 
-			const id                = response.url.id
-			const processedResponse = processResponse(event, response)
+			responses.push(processResponse(event, response))
 
-			responses.urls[id] = (responses.urls[id] || [ ]).concat(processedResponse)
-			getResponseStats(responses)
+			displayStats.json(responses, summariseResponses(responses))
 
 		})
 

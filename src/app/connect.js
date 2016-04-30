@@ -24,23 +24,6 @@ connect.http = connData => {
 
 connect.https = connect.http
 
-connect.ssh = connData => {
-
-	return new Promise((resolve, reject) => {
-		new sshRequest()
-			.on('ready', ( ) => {
-				resolve( )
-			})
-			.connect({
-				host:       connData.host,
-				port:       connData.port,
-				username:   connData.username,
-				privateKey: connData.privateKey
-			})
-	})
-
-}
-
 
 
 
