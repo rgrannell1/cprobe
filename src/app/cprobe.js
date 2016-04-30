@@ -34,13 +34,16 @@ const cprobe = rawArgs => {
 
 	// store any response data for succeeded / failed responses.
 
+	const displayMode = args.json ? 'json' : 'human'
+
 	responseStatuses.forEach(event => {
 
 		connStatuses.on(event, response => {
 
 			responseStats.push(extractResponseStats(event, response))
 
-			displayStats.success(summariseResponses(responseStats))
+			//displayStats.success(summariseResponses(responseStats))
+			displayStats[displayMode](summariseResponses(responseStats))
 
 		})
 
@@ -53,6 +56,7 @@ const cprobe = rawArgs => {
 cprobe.preprocess = rawArgs => {
 
 	return {
+		json:     rawArgs['--json'],
 		urls:     cprobe.preprocess.urls(rawArgs['<url>']),
 		interval: cprobe.preprocess.interval(rawArgs['--interval']),
 		version:  rawArgs['--version']

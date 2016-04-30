@@ -19,21 +19,27 @@ const displayStats = { }
 
 
 
+displayStats.json = urlSummaries => {
+	console.log(JSON.stringify(urlSummaries))
+}
+
+
+
 
 
 {
 
 	let previousLines = 0
 
-	displayStats.success = urlSummaries => {
+	displayStats.human = urlSummaries => {
 
 		const displayLines = Array.prototype.concat.apply( [ ], urlSummaries.map(urlSummary => {
 
 			return [
 				urlSummary.url.url,
-				'	response time ' + displayStats.success.responseTime(urlSummary),
-				'	attempts ' + displayStats.success.totalUrlCount(urlSummary),
-				'	' + displayStats.success.successByTime(urlSummary)
+				'	response time ' + displayStats.human.responseTime(urlSummary),
+				'	attempts ' + displayStats.human.totalUrlCount(urlSummary),
+				'	' + displayStats.human.successByTime(urlSummary)
 			]
 
 		}) )
@@ -48,7 +54,7 @@ const displayStats = { }
 
 }
 
-displayStats.success.responseTime = urlSummary => {
+displayStats.human.responseTime = urlSummary => {
 
 	return urlSummary.summaries
 		.map(data => data.stats.responseTime
@@ -58,7 +64,7 @@ displayStats.success.responseTime = urlSummary => {
 
 }
 
-displayStats.success.totalUrlCount = urlSummary => {
+displayStats.human.totalUrlCount = urlSummary => {
 
 	return urlSummary.summaries
 		.map(data => data.stats.count)
@@ -66,7 +72,7 @@ displayStats.success.totalUrlCount = urlSummary => {
 
 }
 
-displayStats.success.successByTime = urlSummary => {
+displayStats.human.successByTime = urlSummary => {
 
 	const healthColours = [
 		{level: 'success', colour: 'green'},

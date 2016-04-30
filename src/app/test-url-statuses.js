@@ -15,10 +15,10 @@ const constants = require('../commons/constants')
 
 
 
-const connHandlers = { }
-
-connHandlers.http = { }
-connHandlers.ssh  = { }
+const connHandlers = {
+	http: { },
+	ssh:  { }
+}
 
 connHandlers.http.resolve = (emitter, url, {res, body}) => {
 	emitter.emit(constants.events.connSuccess, {

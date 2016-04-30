@@ -17,7 +17,7 @@ const docs = `
 Name:
 	cprobe — test network connections to a URL.
 Usage:
-	cprobe [-i <NUM> | --interval <NUM>] [--] <url>...
+	cprobe [-i <NUM> | --interval <NUM>] [-j | --json] [--] <url>...
 	cprobe (-h | --help | --version)
 
 Description:
@@ -30,6 +30,7 @@ Description:
 	cprobe works supports common protocols (http, https, ssh).
 
 Options:
+	-j, --json                    Display the connection statuses as line-delimited JSON.
 	-i <NUM>, --interval <NUM>    The probe interval [default: 5].
 	-h, --help                    Display this documentation.
 	--version                     Display the package version.
