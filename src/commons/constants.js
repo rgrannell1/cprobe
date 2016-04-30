@@ -11,7 +11,8 @@ var constants = {
 	},
 	events: {
 		connSuccess: 'connSuccess',
-		connFailure: 'connFailure'
+		connFailure: 'connFailure',
+		summaries:   'summaries'
 	},
 	intervals: [30, 60, 300, 600, 1800],
 	packageJson: require('../../package'),

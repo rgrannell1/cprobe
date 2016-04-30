@@ -51,10 +51,17 @@ Version:
 
 
 
-const docopt = require('docopt').docopt
-const cprobe = require('../app/cprobe')
+const docopt       = require('docopt').docopt
+const cprobe       = require('../app/cprobe')
+const displayStats = require('../app/display-stats')
 
 
 
+
+
+const displayMode = 'json'
 
 cprobe(docopt(docs))
+.on(constants.events.summaries, summaries => {
+	displayStats[displayMode](summaries)
+})

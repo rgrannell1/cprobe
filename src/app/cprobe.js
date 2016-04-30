@@ -5,7 +5,6 @@
 
 
 const constants          = require('../commons/constants')
-const displayStats       = require('../app/display-stats')
 const extractResponseStats      = require('../app/response-stats')
 const parseUrl           = require('../app/parse-url')
 const summariseResponses = require('../app/summarise-responses')
@@ -32,18 +31,15 @@ const cprobe = rawArgs => {
 		constants.events.connFailure
 	]
 
-	// store any response data for succeeded / failed responses.
-
-	const displayMode = args.json ? 'json' : 'human'
-
 	responseStatuses.forEach(event => {
 
 		connStatuses.on(event, response => {
 
 			responseStats.push(extractResponseStats(event, response))
 
-			//displayStats.success(summariseResponses(responseStats))
-			displayStats[displayMode](summariseResponses(responseStats))
+			const summaries = summariseResponses(responseStats)
+
+			connStatuses.emit(constants.events.summaries, summaries)
 
 		})
 
@@ -65,6 +61,12 @@ cprobe.preprocess = rawArgs => {
 }
 
 cprobe.preprocess.urls = urls => {
+
+	if (!urls || urls.length === 0) {
+		console.error('error: no URLs supplied.')
+		process.exit(1)
+	}
+
 	return urls.map((url, ith) => {
 		return Object.assign(parseUrl(url), {id: ith})
 	})
