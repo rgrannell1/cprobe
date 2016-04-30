@@ -26,7 +26,7 @@ const displayStats = { }
 
 	displayStats.success = urlSummaries => {
 
-		const thresholdColours = [
+		const healthColours = [
 			{level: 'success', colour: 'green'},
 			{level: 'warning', colour: 'yellow'},
 			{level: 'failure', colour: 'red'}
@@ -34,33 +34,30 @@ const displayStats = { }
 
 		const displayLines = Array.prototype.concat.apply( [ ], urlSummaries.map(urlSummary => {
 
-			const displayData = urlSummary.summaries
+			const timeIntervalDate = urlSummary.summaries
 				.map(timeData => {
 
-					const date           = utils.displayTime(timeData.interval)
 					const successPercent = timeData.stats.successPercentage
+					const healthColour   = healthColours.find( ({level, colour}) => {
+						return successPercent >= constants.threshholds.successPercentage[level]
+					} ).colour
 
-					var successRate
-
-					for (let {level, colour} of thresholdColours) {
-
-						let colourThreshhold = constants.threshholds.successPercentage[level]
-
-						if (successPercent >= colourThreshhold) {
-							successRate = utils.percentify(successPercent)[colour]
-							break
-						}
-
-					}
+					const date        = utils.displayTime(timeData.interval)
+					const successRate = utils.percentify(successPercent)[healthColour]
 
 					return `${date} ${successRate}`
 
 				})
 				.join(' | ')
 
+			const counts = urlSummary.summaries
+				.map(data => data.stats.count)
+				.reduce((acc, count) => acc + count, 0)
+
 			return [
 				urlSummary.url.url,
-				`	${displayData}`
+				`	attempts ${counts}`,
+				`	${timeIntervalDate}`
 			]
 
 		}) )

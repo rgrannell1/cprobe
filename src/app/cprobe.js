@@ -44,7 +44,16 @@ cprobe.preprocess.urls = urls => {
 }
 
 cprobe.preprocess.interval = interval => {
-	return parseInt(interval, 10) * constants.units.millisecondsPerSecond
+
+	const value = parseInt(interval, 10) * constants.units.millisecondsPerSecond
+
+	if (value !== value) {
+		console.error('error: failed to parse --interval')
+		process.exit(1)
+	}
+
+	return value
+
 }
 
 

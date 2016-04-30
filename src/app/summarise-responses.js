@@ -45,6 +45,10 @@ summariseResponses.stats.successPercentage = responses => {
 
 }
 
+summariseResponses.stats.count = responses => {
+	return responses.length
+}
+
 
 
 
