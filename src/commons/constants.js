@@ -26,9 +26,9 @@ var constants = {
 		}
 	},
 	units: {
-		millisecondsPerSecond: 1000,
-		nanosecondsPerSecond:  10000000,
-		secondsPerMinute:      60
+		millisecondsPerSecond:     1000,
+		nanosecondsPerMillisecond: 10000000,
+		secondsPerMinute:          60
 	}
 }
 

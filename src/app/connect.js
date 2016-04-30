@@ -26,7 +26,48 @@ connect.http = connData => {
 				return reject(err)
 			}
 
-			res.responseTime = parseInt(process.hrtime(start)[1] / constants.units.nanosecondsPerSecond, 10)
+			res.responseTime = parseInt(process.hrtime(start)[1] / constants.units.nanosecondsPerMillisecond, 10)
+
+			resolve({res, body})
+
+		})
+
+	})
+
+}
+
+connect.https = connect.http
+
+connect.ssh = connData => {
+
+	return new Promise((resolve, reject) => {
+
+		const start = process.hrtime( )
+
+		const conn = new sshRequest( )
+
+		conn
+		.on('ready', ( ) => {
+			resolve({
+
+			})
+		})
+		.on('error', err => {
+			reject(err)
+		})
+		.connect({
+			host:     connData.hostname,
+			port:     connData.port,
+			username: connData.username
+		})
+
+		httpRequest(connData.url, (err, res, body) => {
+
+			if (err) {
+				return reject(err)
+			}
+
+			res.responseTime = parseInt(process.hrtime(start)[1] / constants.units.nanosecondsPerMillisecond, 10)
 
 			resolve(res, body)
 
@@ -36,7 +77,6 @@ connect.http = connData => {
 
 }
 
-connect.https = connect.http
 
 
 

@@ -36,6 +36,18 @@ utils.terminal.eraseLines = count => {
 
 }
 
+utils.medianOf = nums => {
+
+	nums.sort( )
+
+	if (nums.length === 0) {
+		throw Error('cannot take median of empty list.')
+	} else {
+		return nums[Math.floor(nums.length / 2)]
+	}
+
+}
+
 
 
 

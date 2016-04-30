@@ -3,9 +3,7 @@
 
 
 
-const url       = require('url')
-const sshUrl    = require('ssh-url')
-
+const URL       = require('url')
 const constants = require('../commons/constants')
 const utils     = require('../commons/utils')
 
@@ -37,6 +35,20 @@ parseUrl.http  = url => {
 
 parseUrl.https = url => {
 	return {protocol: 'https', url}
+}
+
+parseUrl.ssh = url => {
+
+	const parts = URL.parse(url)
+
+	return {
+		url,
+		protocol: 'ssh',
+		user:     parts.auth,
+		port:     parts.port,
+		hostname: parts.hostname
+	}
+
 }
 
 

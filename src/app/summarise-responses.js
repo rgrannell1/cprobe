@@ -49,6 +49,18 @@ summariseResponses.stats.count = responses => {
 	return responses.length
 }
 
+summariseResponses.stats.responseTime = responses => {
+
+	const responseTimes = responses
+		.map(res => res.metrics.responseTime)
+		.filter(res => res !== null)
+
+	return responseTimes.length === 0
+		? null
+		: utils.medianOf(responseTimes)
+
+}
+
 
 
 

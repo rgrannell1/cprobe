@@ -17,12 +17,14 @@ const constants = require('../commons/constants')
 
 const testUrlStatus = (args, emitter, url) => {
 
+	// TODO make protocol specific?
+
 	setInterval(( ) => {
 
 		const connPromise = connect[url.protocol](url)
 
 		connPromise.then(
-			(res, body) => {
+			({res, body}) => {
 				emitter.emit(constants.events.connSuccess, {
 					url, res, body, time: Date.now( )
 				})
