@@ -5,9 +5,9 @@
 
 
 const parseUrl           = require('../app/parse-url')
-const probeUrls          = require('../app/probe-urls')
+const testUrlStatuses    = require('../app/test-url-statuses')
 const constants          = require('../commons/constants')
-const monitorConnections = require('../app/monitor-connections')
+const monitorUrls        = require('../app/monitor-urls')
 
 
 
@@ -16,14 +16,14 @@ const monitorConnections = require('../app/monitor-connections')
 const cprobe = rawArgs => {
 
 	const args         = cprobe.preprocess(rawArgs)
-	const connStatuses = probeUrls(args, args.urls)
+	const connStatuses = testUrlStatuses(args, args.urls)
 
 	if (args.version) {
 		console.log(constants.packageJson.version)
 		process.exit(0)
 	}
 
-	return monitorConnections(connStatuses)
+	return monitorUrls(connStatuses)
 
 }
 

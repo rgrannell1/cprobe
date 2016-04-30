@@ -27,6 +27,8 @@ Description:
 	* replace manual CURL testing during installation / reconfiguration.
 	* test and measure network reliability.
 
+	cprobe works supports common protocols (http, https, ssh).
+
 Options:
 	-i <NUM>, --interval <NUM>    The probe interval [default: 5].
 	-h, --help                    Display this documentation.
