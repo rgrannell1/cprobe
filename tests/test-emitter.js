@@ -79,12 +79,42 @@ tests.schema.types = summaries => {
 
 
 
-utils.cprobeTestApp.http(
-	6000,
-	(req, res) => res.status(200).send(''),
-	summaries => {
+Promise
+.race([
+	new Promise(resolve => {
 
-		tests.schema(summaries)
+		setTimeout(
+			( ) => resolve('finished!'),
+			60 * 1000)
 
+	}),
+	new Promise((resolve, reject) => {
+
+		try {
+
+			utils.cprobeTestApp.http(
+				6000,
+				(req, res) => res.status(200).send(''),
+				summaries => {
+					tests.schema(summaries)
+				}
+			)
+
+		} catch (err) {
+			reject(err)
+		}
+
+	})
+])
+.then(
+	message => {
+		console.log(message)
+		process.exit(0)
+	},
+	err => {
+		console.log(err.stack)
+		process.exit(1)
 	}
 )
+
+
