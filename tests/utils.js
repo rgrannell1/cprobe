@@ -37,13 +37,13 @@ cprobeTestApp.http = (port, sender, onSummary) => {
 		port => {
 
 			const emitter = cprobe({
-				json: false,
+				json: true,
 				urls: [
 					`http://localhost:${port}`
 				],
 				interval: 0.1 * 1000,
 				version:  false,
-				display:  true
+				display:  false
 			})
 
 			emitter.on(constants.events.summaries, onSummary)
