@@ -15,8 +15,9 @@ const displayStats       = require('../app/display-stats')
 
 
 
-const cprobe = args => {
+const cprobe = rawArgs => {
 
+	const args         = cprobe.preprocess(rawArgs)
 	const connStatuses = testUrlStatuses(args, args.urls)
 
 	if (args.version) {
@@ -59,6 +60,16 @@ const cprobe = args => {
 	})
 
 	return connStatuses
+
+}
+
+cprobe.preprocess = rawArgs => {
+
+	rawArgs.urls = rawArgs.urls.map((url, ith) => {
+		return Object.assign(parseUrl(url), {id: ith})
+	})
+
+	return rawArgs
 
 }
 

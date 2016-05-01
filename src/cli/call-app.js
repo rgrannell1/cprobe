@@ -33,9 +33,8 @@ callApp.preprocess.urls = urls => {
 		process.exit(1)
 	}
 
-	return urls.map((url, ith) => {
-		return Object.assign(parseUrl(url), {id: ith})
-	})
+	return urls
+
 }
 
 callApp.preprocess.interval = interval => {

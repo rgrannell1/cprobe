@@ -5,6 +5,7 @@
 
 
 
+const is        = require('is')
 const colors    = require('colors')
 const utils     = require('../commons/utils')
 const constants = require('../commons/constants')
@@ -57,7 +58,7 @@ displayStats.json = urlSummaries => {
 displayStats.human.responseTime = urlSummary => {
 
 	return urlSummary.summaries
-		.map(data => data.stats.responseTime
+		.map(data => is.number(data.stats.responseTime)
 			? data.stats.responseTime + 'ms'
 			: 'unknown')
 		.join(' | ')

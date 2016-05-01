@@ -58,4 +58,6 @@ const callApp      = require('../cli/call-app')
 
 
 
-callApp( Object.assign({'--display': true}, docopt(docs)) )
+callApp( Object.assign({
+	'--display': true
+}, docopt(docs)) )

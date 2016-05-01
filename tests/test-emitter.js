@@ -12,7 +12,10 @@ const utils  = require('./utils')
 
 
 
-utils.cprobeTestApp.http(6000, summaries => {
+utils.cprobeTestApp.http(
+	6000,
+	(req, res) => res.status(200).send(''),
+	summaries => {
 
 	expect(summaries).to.have.length(1)
 

@@ -14,13 +14,13 @@ const express   = require('express')
 
 const mockServers = { }
 
-mockServers.http = port => {
+mockServers.http = (port, sender) => {
 
 	return new Promise((resolve, reject) => {
 
 		express( )
 		.get('*', (req, res) => {
-			res.sendStatus(200)
+			sender(req, res)
 		})
 		.listen(port, ( ) => resolve(port))
 
@@ -30,19 +30,20 @@ mockServers.http = port => {
 
 const cprobeTestApp = { }
 
-cprobeTestApp.http = (port, onSummary) => {
+cprobeTestApp.http = (port, sender, onSummary) => {
 
-	mockServers.http(port)
+	mockServers.http(port, sender)
 	.then(
 		port => {
 
 			const emitter = cprobe({
-				'--json': true,
-				'<url>': [
+				json: false,
+				urls: [
 					`http://localhost:${port}`
 				],
-				'--interval': 1,
-				'--version':  false
+				interval: 0.1 * 1000,
+				version:  false,
+				display:  true
 			})
 
 			emitter.on(constants.events.summaries, onSummary)
