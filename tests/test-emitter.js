@@ -18,25 +18,21 @@ utils.cprobeTestApp.http(6000, summaries => {
 
 	const summary = summaries[0]
 
-	;['summaries', 'url'].forEach(prop => {
-		expect(summary).to.have.property(prop)
-	})
+	;['summaries', 'url']
+		.forEach(prop => expect(summary).to.have.property(prop))
 
-	;['id', 'protocol', 'url'].forEach(prop => {
-		expect(summary.url).to.have.property(prop)
-	})
+	;['id', 'protocol', 'url']
+		.forEach(prop => expect(summary.url).to.have.property(prop))
 
 	summary.summaries.forEach(timeSummary => {
 
 		expect(timeSummary).to.have.property('interval')
 
-		;['interval', 'stats'].forEach(prop => {
-			expect(timeSummary).to.have.property(prop)
-		})
+		;['interval', 'stats']
+			.forEach(prop => expect(timeSummary).to.have.property(prop))
 
-		;['count', 'responseTime', 'successPercentage'].forEach(prop => {
-			expect(timeSummary.stats).to.have.property(prop)
-		})
+		;['count', 'responseTime', 'successPercentage']
+			.forEach(prop => expect(timeSummary.stats).to.have.property(prop))
 
 	})
 

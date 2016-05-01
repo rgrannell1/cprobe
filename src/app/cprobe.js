@@ -10,14 +10,13 @@ const parseUrl           = require('../app/parse-url')
 const summariseResponses = require('../app/summarise-responses')
 const testUrlStatuses    = require('../app/test-url-statuses')
 const utils              = require('../commons/utils')
+const displayStats       = require('../app/display-stats')
 
 
 
 
+const cprobe = args => {
 
-const cprobe = rawArgs => {
-
-	const args         = cprobe.preprocess(rawArgs)
 	const connStatuses = testUrlStatuses(args, args.urls)
 
 	if (args.version) {
@@ -33,7 +32,8 @@ const cprobe = rawArgs => {
 
 	responseStatuses.forEach(event => {
 
-		connStatuses.on(event, response => {
+		connStatuses
+		.on(event, response => {
 
 			responseStats.push(extractResponseStats(event, response))
 
@@ -42,49 +42,25 @@ const cprobe = rawArgs => {
 			connStatuses.emit(constants.events.summaries, summaries)
 
 		})
+		.on(constants.events.summaries, summaries => {
+
+			if (args.display) {
+
+				const displayMode = args.json
+					? 'json'
+					: 'human'
+
+				displayStats[displayMode](summaries)
+
+			}
+
+		})
 
 	})
 
 	return connStatuses
 
 }
-
-cprobe.preprocess = rawArgs => {
-
-	return {
-		json:     rawArgs['--json'],
-		urls:     cprobe.preprocess.urls(rawArgs['<url>']),
-		interval: cprobe.preprocess.interval(rawArgs['--interval']),
-		version:  rawArgs['--version']
-	}
-
-}
-
-cprobe.preprocess.urls = urls => {
-
-	if (!urls || urls.length === 0) {
-		console.error('error: no URLs supplied.')
-		process.exit(1)
-	}
-
-	return urls.map((url, ith) => {
-		return Object.assign(parseUrl(url), {id: ith})
-	})
-}
-
-cprobe.preprocess.interval = interval => {
-
-	const value = parseInt(interval, 10) * constants.units.millisecondsPerSecond
-
-	if (value !== value) {
-		console.error('error: failed to parse --interval')
-		process.exit(1)
-	}
-
-	return value
-
-}
-
 
 
 

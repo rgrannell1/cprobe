@@ -17,7 +17,7 @@ const docs = `
 Name:
 	cprobe — test network connections to a URL.
 Usage:
-	cprobe [-i <NUM> | --interval <NUM>] [-j | --json] [--] <url>...
+	cprobe [-i <NUM> | --interval <NUM>] [-j | --json] [-h | --human] [--] <url>...
 	cprobe (-h | --help | --version)
 
 Description:
@@ -52,16 +52,10 @@ Version:
 
 
 const docopt       = require('docopt').docopt
-const cprobe       = require('../app/cprobe')
-const displayStats = require('../app/display-stats')
+const callApp      = require('../cli/call-app')
 
 
 
 
 
-const displayMode = 'json'
-
-cprobe(docopt(docs))
-.on(constants.events.summaries, summaries => {
-	displayStats[displayMode](summaries)
-})
+callApp( Object.assign({'--display': true}, docopt(docs)) )
