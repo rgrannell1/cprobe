@@ -50,24 +50,26 @@ tests.schema.types = summaries => {
 
 	expect(summaries).to.be.an('array')
 
-	const summary = summaries[0]
+	summaries.forEach(summary => {
 
-	expect(summary.summaries).to.be.an('array')
+		expect(summary.summaries).to.be.an('array')
 
-	expect(summary.url).to.be.an('object')
+		expect(summary.url).to.be.an('object')
 
-	expect(summary.url.id).to.be.a('number')
-	expect(summary.url.protocol).to.be.a('string')
-	expect(summary.url.url).to.be.a('string')
+		expect(summary.url.id).to.be.a('number')
+		expect(summary.url.protocol).to.be.a('string')
+		expect(summary.url.url).to.be.a('string')
 
-	summary.summaries.forEach(summary => {
+		summary.summaries.forEach(summary => {
 
-		expect(summary.interval).to.be.a('string')
-		expect(summary.stats).to.be.a('object')
+			expect(summary.interval).to.be.a('string')
+			expect(summary.stats).to.be.a('object')
 
-		expect(summary.stats.count).to.be.a('number')
-		expect(summary.stats.responseTime).to.be.a('number')
-		expect(summary.stats.successPercentage).to.be.a('number')
+			expect(summary.stats.count).to.be.a('number')
+			expect(summary.stats.responseTime).to.be.a('number')
+			expect(summary.stats.successPercentage).to.be.a('number')
+
+		})
 
 	})
 
