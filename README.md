@@ -23,6 +23,19 @@ cprobe https://google.com ssh://fake@test.com:24
 - [ ] Command-line interface.
 	- [ ] Docopt.
 	- [ ] Neodoc.
+	- [ ] Version flag.
+- [ ] Protocols.
+	- [ ] TCP connections.
+	- [ ] UDP connections.
+	- [ ] HTTP connections.
+	- [ ] HTTPS connections.
+	- [ ] SSH connections.
+- [ ] Protocol-specific features.
+	- [ ] TCP request-times.
+	- [ ] UDP request-times.
+	- [ ] HTTP request-times.
+	- [ ] HTTPS request-times.
+	- [ ] SSH request-times.
 - [ ] Output.
 	- [ ] Line-delimited JSON output.
 	- [ ] Carriage-retun human-readable output.
