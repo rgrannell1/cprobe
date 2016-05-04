@@ -53,6 +53,7 @@ cprobe https://google.com ssh://fake@test.com:24
 - [ ] Library value.
 	- [ ] Event-emitter of summary statistics.
 - [ ] Testing.
+	- [ ] Mocha integration.
 	- [ ] Ensure test-procedure works with false-negative.
 	- [ ] Ensure test-procedure works with false-positive.
 	- [ ] Cases.
