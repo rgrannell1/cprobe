@@ -2,43 +2,43 @@
 # Features
 
 - [ ] Command-line interface.
-	- [ ] Docopt.
+	- [x] Docopt.
 	- [ ] Neodoc.
-	- [ ] Version flag.
+	- [x] Version flag.
 - [ ] Protocols.
 	- [ ] TCP connections.
 	- [ ] UDP connections.
-	- [ ] HTTP connections.
-	- [ ] HTTPS connections.
-	- [ ] SSH connections.
+	- [x] HTTP connections.
+	- [x] HTTPS connections.
+	- [x] SSH connections.
 - [ ] Protocol-specific features.
 	- [ ] TCP.
 		- [ ] Request-times.
 	- [ ] UDP.
 		- [ ] Request-times.
-	- [ ] HTTP.
-		- [ ] Request-times.
+	- [x] HTTP.
+		- [x] Request-times.
 		- [ ] Status codes.
 		- [ ] Agent obsfucation.
-	- [ ] HTTPS.
-		- [ ] Request-times.
+	- [x] HTTPS.
+		- [x] Request-times.
 		- [ ] Status codes.
 		- [ ] Agent obsfucation.
 	- [ ] SSH.
 		- [ ] Request-times.
-- [ ] Output.
-	- [ ] Line-delimited JSON output.
-	- [ ] Carriage-retun human-readable output.
+- [x] Output.
+	- [x] Line-delimited JSON output.
+	- [x] Carriage-retun human-readable output.
 	- [ ] Ncurses human-readable output.
-- [ ] Allow the connection interval to be specified.
-- [ ] Library value.
-	- [ ] Event-emitter of summary statistics.
+- [x] Allow the connection interval to be specified.
+- [x] Library value.
+	- [x] Event-emitter of summary statistics.
 - [ ] Testing.
-	- [ ] Mocha integration.
+	- [x] Mocha integration.
 	- [ ] Ensure test-procedure works with false-negative.
 	- [ ] Ensure test-procedure works with false-positive.
 	- [ ] Cases.
-		- [ ] 200-status HTTP server.
+		- [x] 200-status HTTP server.
 		- [ ] 50% success-status HTTP server.
 		- [ ] Success test-TCP server. 
 		- [ ] Success test-UDP server.
