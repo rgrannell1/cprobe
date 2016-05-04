@@ -18,6 +18,17 @@ cprobe works supports common protocols (http, https, ssh).
 cprobe https://google.com ssh://fake@test.com:24
 ```
 
+### Features
+
+- [ ] Command-line interface.
+	- [ ] Docopt.
+	- [ ] Neodoc.
+- [ ] Output.
+	- [ ] Line-delimited JSON output.
+	- [ ] Carriage-retun human-readable output.
+	- [ ] Ncurses human-readable output.
+- [ ] Allow the connection interval to be specified.
+
 ### License
 
 The MIT License

@@ -105,28 +105,27 @@ describe('cprobe (healthy http server)', function ( ) {
 
 	const start = Date.now( )
 
+	const caseDuration = 65 * 1000
+	const okaySender   = (_, res) => res.status(200).send('')
+
 	it('has a fixed property / type schema.', function (done) {
 
-		const caseDuration = 65 * 1000
-
-		this.timeout(30 * 60 * 1000)
+		this.timeout(0)
 
 		utils.cprobeTestApp
-			.http(
-				6000, caseDuration,
-				function (req, res) {
-					res.status(200).send('')
-				},
-				function (summaries) {
+			.http(6000, caseDuration, okaySender)
+			.then( ({emitter, server}) => {
+
+				emitter.on(constants.events.summaries, summaries => {
 
 					tests.schema(summaries)
 					tests.schema(summaries)
 					tests.intervals(start, constants.intervals, summaries)
 
-				}
-			)
-			.then( ({emitter, server}) => {
+				})
+
 				setTimeout(( ) => server.close(done), caseDuration)
+
 			})
 			.catch(err => {
 				console.error(err.message)

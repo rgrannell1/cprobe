@@ -27,7 +27,7 @@ Description:
 	* replace manual CURL testing during installation / reconfiguration.
 	* test and measure network reliability.
 
-	cprobe works supports common protocols (http, https, ssh).
+	cprobe works supports common protocols (http, https, ssh, tcp).
 
 Options:
 	-j, --json                    Display the connection statuses as line-delimited JSON.

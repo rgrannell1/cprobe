@@ -32,7 +32,7 @@ mockServers.http = (port, sender) => {
 
 const cprobeTestApp = { }
 
-cprobeTestApp.http = (port, timeout, sender, onSummary) => {
+cprobeTestApp.http = (port, timeout, sender) => {
 
 	return mockServers.http(port, sender)
 		.then(server => {
@@ -47,8 +47,6 @@ cprobeTestApp.http = (port, timeout, sender, onSummary) => {
 				display:  false,
 				timeout:  timeout
 			})
-
-			emitter.on(constants.events.summaries, onSummary)
 
 			return {emitter, server}
 
