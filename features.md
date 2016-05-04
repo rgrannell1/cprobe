@@ -1,0 +1,46 @@
+
+# Features
+
+- [ ] Command-line interface.
+	- [ ] Docopt.
+	- [ ] Neodoc.
+	- [ ] Version flag.
+- [ ] Protocols.
+	- [ ] TCP connections.
+	- [ ] UDP connections.
+	- [ ] HTTP connections.
+	- [ ] HTTPS connections.
+	- [ ] SSH connections.
+- [ ] Protocol-specific features.
+	- [ ] TCP.
+		- [ ] Request-times.
+	- [ ] UDP.
+		- [ ] Request-times.
+	- [ ] HTTP.
+		- [ ] Request-times.
+		- [ ] Status codes.
+		- [ ] Agent obsfucation.
+	- [ ] HTTPS.
+		- [ ] Request-times.
+		- [ ] Status codes.
+		- [ ] Agent obsfucation.
+	- [ ] SSH.
+		- [ ] Request-times.
+- [ ] Output.
+	- [ ] Line-delimited JSON output.
+	- [ ] Carriage-retun human-readable output.
+	- [ ] Ncurses human-readable output.
+- [ ] Allow the connection interval to be specified.
+- [ ] Library value.
+	- [ ] Event-emitter of summary statistics.
+- [ ] Testing.
+	- [ ] Mocha integration.
+	- [ ] Ensure test-procedure works with false-negative.
+	- [ ] Ensure test-procedure works with false-positive.
+	- [ ] Cases.
+		- [ ] 200-status HTTP server.
+		- [ ] 50% success-status HTTP server.
+		- [ ] Success test-TCP server. 
+		- [ ] Success test-UDP server.
+		- [ ] Success test-SSH server.
+	- [ ] Test summary
