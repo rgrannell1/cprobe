@@ -31,11 +31,16 @@ cprobe https://google.com ssh://fake@test.com:24
 	- [ ] HTTPS connections.
 	- [ ] SSH connections.
 - [ ] Protocol-specific features.
-	- [ ] TCP request-times.
-	- [ ] UDP request-times.
-	- [ ] HTTP request-times.
-	- [ ] HTTPS request-times.
-	- [ ] SSH request-times.
+	- [ ] TCP.
+		- [ ] Request-times.
+	- [ ] UDP.
+		- [ ] Request-times.
+	- [ ] HTTP.
+		- [ ] Request-times.
+	- [ ] HTTPS.
+		- [ ] Request-times.
+	- [ ] SSH.
+		- [ ] Request-times.
 - [ ] Output.
 	- [ ] Line-delimited JSON output.
 	- [ ] Carriage-retun human-readable output.
