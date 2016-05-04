@@ -50,6 +50,18 @@ cprobe https://google.com ssh://fake@test.com:24
 	- [ ] Carriage-retun human-readable output.
 	- [ ] Ncurses human-readable output.
 - [ ] Allow the connection interval to be specified.
+- [ ] Library value.
+	- [ ] Event-emitter of summary statistics.
+- [ ] Testing.
+	- [ ] Ensure test-procedure works with false-negative.
+	- [ ] Ensure test-procedure works with false-positive.
+	- [ ] Cases.
+		- [ ] 200-status HTTP server.
+		- [ ] 50% success-status HTTP server.
+		- [ ] Success test-TCP server. 
+		- [ ] Success test-UDP server.
+		- [ ] Success test-SSH server.
+	- [ ] Test summary
 
 ### License
 
