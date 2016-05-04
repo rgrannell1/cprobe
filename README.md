@@ -37,8 +37,12 @@ cprobe https://google.com ssh://fake@test.com:24
 		- [ ] Request-times.
 	- [ ] HTTP.
 		- [ ] Request-times.
+		- [ ] Status codes.
+		- [ ] Agent obsfucation.
 	- [ ] HTTPS.
 		- [ ] Request-times.
+		- [ ] Status codes.
+		- [ ] Agent obsfucation.
 	- [ ] SSH.
 		- [ ] Request-times.
 - [ ] Output.
