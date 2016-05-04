@@ -36,6 +36,7 @@
 	- [x] Event-emitter of summary statistics.
 - [ ] Testing.
 	- [x] Mocha integration.
+	- [ ] Anything-but-Mocha integration.
 	- [ ] Ensure test-procedure works with false-negative.
 	- [ ] Ensure test-procedure works with false-positive.
 	- [ ] Cases.
