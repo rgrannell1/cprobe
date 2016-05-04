@@ -11,6 +11,7 @@
 	- [x] HTTP connections.
 	- [x] HTTPS connections.
 	- [x] SSH connections.
+- [ ] Default to HTTP / HTTPS.
 - [ ] Protocol-specific features.
 	- [ ] TCP.
 		- [ ] Request-times.
