@@ -44,4 +44,7 @@
 		- [ ] Success test-TCP server. 
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
-	- [ ] Test summary
+	- [ ] Event summary test
+		- [ ] Test summary properties.
+		- [ ] Test summary types.
+		- [ ] Test summary interval length over time.
