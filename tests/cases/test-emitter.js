@@ -6,6 +6,7 @@
 
 
 const is        = require('is')
+const events    = require('events')
 const constants = require('../../src/commons/constants')
 const expect    = require('expect.js')
 const utils     = require('../commons/utils')
@@ -90,18 +91,23 @@ tests.intervals = (start, intervals, summaries) => {
 
 	const elapsedMilliseconds = Date.now( ) - start
 
+	const expectedLength = intervals.indexOf(intervals.find(interval => interval > elapsedMilliseconds)) + 1
+
+	expect(summaries[0].summaries.length).to.be.within(expectedLength - 1, expectedLength)
+
 }
 
 
 
 
 
-describe('#cprobe', function ( ) {
+describe('cprobe (healthy http server)', function ( ) {
+
+	const start = Date.now( )
 
 	it('has a fixed property / type schema.', function (done) {
 
-		const start        = Date.now( )
-		const caseDuration = 10 * 1000
+		const caseDuration = 65 * 1000
 
 		this.timeout(30 * 60 * 1000)
 
@@ -113,6 +119,7 @@ describe('#cprobe', function ( ) {
 				},
 				function (summaries) {
 
+					tests.schema(summaries)
 					tests.schema(summaries)
 					tests.intervals(start, constants.intervals, summaries)
 
