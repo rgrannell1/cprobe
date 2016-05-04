@@ -15,7 +15,7 @@ const utils     = require('../commons/utils')
 const assignTimeInterval = (intervals, response) => {
 
 	const currentTime    = Date.now( )
-	const elapsedSeconds = Math.floor((currentTime - response.time) / constants.units.millisecondsPerSecond)
+	const elapsedSeconds = Math.floor(currentTime - response.time)
 
 	return Object.assign({
 		interval: intervals.find(candidate => candidate > elapsedSeconds)

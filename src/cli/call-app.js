@@ -21,7 +21,8 @@ callApp.preprocess = rawArgs => {
 		urls:     callApp.preprocess.urls(rawArgs['<url>']),
 		interval: callApp.preprocess.interval(rawArgs['--interval']),
 		version:  rawArgs['--version'],
-		display:  rawArgs['--display']
+		display:  rawArgs['--display'],
+		timeout:  Infinity
 	}
 
 }

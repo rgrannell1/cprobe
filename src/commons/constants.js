@@ -14,7 +14,13 @@ var constants = {
 		connFailure: 'connFailure',
 		summaries:   'summaries'
 	},
-	intervals: [30, 60, 300, 600, 1800],
+	intervals: [
+		30   * 1000,
+		60   * 1000,
+		300  * 1000,
+		600  * 1000,
+		1800 * 1000
+	],
 	packageJson: require('../../package'),
 	regex: {
 		protocol: /^([a-z]+):[\/]{2}/

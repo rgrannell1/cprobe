@@ -28,6 +28,7 @@
     "colors": "^1.1.2",
     "docopt": "^0.6.2",
     "is": "github:rgrannell1/is",
+    "mocha": "^2.4.5",
     "request": "^2.72.0",
     "ssh2": "^0.5.0"
   }

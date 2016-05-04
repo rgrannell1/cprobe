@@ -50,9 +50,17 @@ connHandlers.ssh.reject = (emitter, url, err) => {
 
 
 
+const start = Date.now( )
+
 const testUrlStatus = (args, emitter, url) => {
 
-	setInterval(( ) => {
+	const probeInterval = setInterval(( ) => {
+
+		const elasped = Date.now( ) - start
+
+		if (elasped > args.timeout) {
+			clearInterval(probeInterval)
+		}
 
 		const connPromise = connect[url.protocol](url)
 

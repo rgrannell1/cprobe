@@ -4,8 +4,8 @@
 
 
 
-const constants = require('../src/commons/constants')
-const cprobe    = require('../src/app/cprobe')
+const constants = require('../../src/commons/constants')
+const cprobe    = require('../../src/app/cprobe')
 const express   = require('express')
 
 
@@ -18,11 +18,13 @@ mockServers.http = (port, sender) => {
 
 	return new Promise((resolve, reject) => {
 
-		express( )
-		.get('*', (req, res) => {
-			sender(req, res)
-		})
-		.listen(port, ( ) => resolve(port))
+		const server = express( )
+			.get('*', (req, res) => {
+				sender(req, res)
+			})
+			.listen(port, ( ) => {
+				resolve(server)
+			})
 
 	})
 
@@ -30,11 +32,10 @@ mockServers.http = (port, sender) => {
 
 const cprobeTestApp = { }
 
-cprobeTestApp.http = (port, sender, onSummary) => {
+cprobeTestApp.http = (port, timeout, sender, onSummary) => {
 
-	mockServers.http(port, sender)
-	.then(
-		port => {
+	return mockServers.http(port, sender)
+		.then(server => {
 
 			const emitter = cprobe({
 				json: true,
@@ -43,13 +44,15 @@ cprobeTestApp.http = (port, sender, onSummary) => {
 				],
 				interval: 0.1 * 1000,
 				version:  false,
-				display:  false
+				display:  false,
+				timeout:  timeout
 			})
 
 			emitter.on(constants.events.summaries, onSummary)
 
-		}
-	)
+			return {emitter, server}
+
+		})
 
 }
 
