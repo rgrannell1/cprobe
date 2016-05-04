@@ -44,7 +44,11 @@
 		- [ ] Success test-TCP server. 
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
-	- [ ] Event summary test
+	- [ ] Event summary test.
 		- [ ] Test summary properties.
 		- [ ] Test summary types.
 		- [ ] Test summary interval length over time.
+		- [ ] Test summary value legitimacy.
+	- [ ] Output testing.
+		- [ ] Reparse line-delimited JSON reparsing.
+		- [ ] Reparse human-readable output.
