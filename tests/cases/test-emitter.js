@@ -98,6 +98,35 @@ tests.intervals = (start, intervals, summaries) => {
 
 const cases = { }
 
+cases.negative = ( ) => {
+
+	const message = "tests (false negative)"
+
+	utils.setup.http({
+		port:    5900,
+		timeout: 6 * 1000,
+		sender:  (_, res) => {
+			res.status(200).send('')
+		},
+		tests: [( ) => { }]
+	})
+	.then(( ) => {
+
+
+		console.error(`✓ cprobe ${message}`.green)
+
+
+	})
+	.catch(err => {
+
+		console.error(`✕ cprobe ${message}`.red)
+		console.error(err)
+		process.exit(1)
+
+	})
+
+}
+
 cases.falsePositive = ( ) => {
 
 	const message = "tests (false positive)"
@@ -109,20 +138,18 @@ cases.falsePositive = ( ) => {
 			res.status(200).send('')
 		},
 		tests: [
-			( ) => {throw Error('deliberate failure.')}
+			( ) => { throw Error('deliberate failure.') }
 		]
 	})
 	.then(( ) => {
 
-
-		console.log(`✕ cprobe ${message}`.red)
-		console.error(err)
+		console.error(`✕ cprobe ${message}`.red)
 		process.exit(1)
-
 
 	})
 	.catch(err => {
-		console.log(`✓ cprobe ${message}`.green)
+		console.error(`✓ cprobe ${message}`.green)
+		console.error(err)
 	})
 
 }
@@ -144,11 +171,11 @@ cases.healthyServer = ( ) => {
 		]
 	})
 	.then(( ) => {
-		console.log(`✓ cprobe ${message}`.green)
+		console.error(`✓ cprobe ${message}`.green)
 	})
 	.catch(err => {
 
-		console.log(`✕ cprobe ${message}`.red)
+		console.error(`✕ cprobe ${message}`.red)
 		console.error(err)
 		process.exit(1)
 
@@ -173,11 +200,14 @@ cases.halfHealthyServer = ( ) => {
 		]
 	})
 	.then(( ) => {
-		console.log(`✓ cprobe ${message}`.green)
+		console.error(`✓ cprobe ${message}`.green)
 	})
 	.catch(err => {
-		console.log(`✕ cprobe ${message}`.red)
+
+		console.error(`✕ cprobe ${message}`.red)
 		console.error(err)
+		process.exit(1)
+
 	})
 
 }
@@ -186,6 +216,7 @@ cases.halfHealthyServer = ( ) => {
 
 
 
+cases.negative( )
 cases.falsePositive( )
 cases.healthyServer( )
 cases.halfHealthyServer( )

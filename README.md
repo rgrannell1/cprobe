@@ -18,43 +18,6 @@ cprobe works supports common protocols (http, https, ssh).
 cprobe https://google.com ssh://fake@test.com:24
 ```
 
-### Features
-
-- [ ] Command-line interface.
-	- [ ] Docopt.
-	- [ ] Neodoc.
-	- [ ] Version flag.
-- [ ] Protocols.
-	- [ ] TCP connections.
-	- [ ] UDP connections.
-	- [ ] HTTP connections.
-	- [ ] HTTPS connections.
-	- [ ] SSH connections.
-- [ ] Protocol-specific features.
-	- [ ] TCP.
-		- [ ] Request-times.
-	- [ ] UDP.
-		- [ ] Request-times.
-	- [ ] HTTP.
-		- [ ] Request-times.
-	- [ ] HTTPS.
-		- [ ] Request-times.
-	- [ ] SSH.
-		- [ ] Request-times.
-- [ ] Output.
-	- [ ] Line-delimited JSON output.
-	- [ ] Carriage-retun human-readable output.
-	- [ ] Ncurses human-readable output.
-- [ ] Library value.
-	- [ ] Event-emitter of summary statistics.
-- [ ] Allow the connection interval to be specified.
-- [ ] Testing.
-	- [ ] Ensure test-procedure works with false-negative.
-	- [ ] Ensure test-procedure works with false-positive.
-	- [ ] Test cases.
-		- [ ]
-	- [ ] Test summary
-
 ### License
 
 The MIT License

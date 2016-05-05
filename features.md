@@ -1,0 +1,61 @@
+
+# Features
+
+- [ ] Command-line interface.
+	- [x] Docopt.
+	- [ ] Neodoc.
+	- [x] Version flag.
+- [ ] Protocols.
+	- [ ] TCP connections.
+	- [ ] UDP connections.
+	- [x] HTTP connections.
+	- [x] HTTPS connections.
+	- [x] SSH connections.
+- [ ] Default to HTTP / HTTPS.
+- [ ] Protocol-specific features.
+	- [ ] TCP.
+		- [ ] Request-times.
+	- [ ] UDP.
+		- [ ] Request-times.
+	- [x] HTTP.
+		- [x] Request-times.
+		- [ ] Status codes.
+		- [ ] Agent obsfucation.
+	- [x] HTTPS.
+		- [x] Request-times.
+		- [ ] Status codes.
+		- [ ] Agent obsfucation.
+	- [ ] SSH.
+		- [ ] Request-times.
+- [ ] Proxy options.
+	- [ ] TCP 
+	- [ ] UDP
+	- [ ] HTTP
+	- [ ] HTTPS
+	- [ ] SSH 
+- [x] Output.
+	- [x] Line-delimited JSON output.
+	- [x] Carriage-retun human-readable output.
+	- [ ] Ncurses human-readable output.
+- [x] Allow the connection interval to be specified.
+- [x] Library value.
+	- [x] Event-emitter of summary statistics.
+- [ ] Testing.
+	- [x] Mocha integration.
+	- [ ] Anything-but-Mocha integration.
+	- [ ] Ensure test-procedure works with false-negative.
+	- [ ] Ensure test-procedure works with false-positive.
+	- [ ] Cases.
+		- [x] 200-status HTTP server.
+		- [ ] 50% success-status HTTP server.
+		- [ ] Success test-TCP server. 
+		- [ ] Success test-UDP server.
+		- [ ] Success test-SSH server.
+	- [ ] Event summary test.
+		- [x] Test summary properties.
+		- [x] Test summary types.
+		- [x] Test summary interval length over time.
+		- [ ] Test summary value legitimacy.
+	- [ ] Output testing.
+		- [ ] Reparse line-delimited JSON reparsing.
+		- [ ] Reparse human-readable output.
