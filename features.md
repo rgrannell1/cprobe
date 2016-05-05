@@ -27,6 +27,12 @@
 		- [ ] Agent obsfucation.
 	- [ ] SSH.
 		- [ ] Request-times.
+- [ ] Proxy options.
+	- [ ] TCP 
+	- [ ] UDP
+	- [ ] HTTP
+	- [ ] HTTPS
+	- [ ] SSH 
 - [x] Output.
 	- [x] Line-delimited JSON output.
 	- [x] Carriage-retun human-readable output.
