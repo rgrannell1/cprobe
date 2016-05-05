@@ -47,7 +47,7 @@
 	- [x] Ensure test-procedure works with false-positive.
 	- [ ] Cases.
 		- [x] 200-status HTTP server.
-		- [ ] 50% success-status HTTP server.
+		- [x] 50% success-status HTTP server.
 		- [ ] Success test-TCP server. 
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
