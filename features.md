@@ -42,9 +42,9 @@
 	- [x] Event-emitter of summary statistics.
 - [ ] Testing.
 	- [x] Mocha integration.
-	- [ ] Anything-but-Mocha integration.
-	- [ ] Ensure test-procedure works with false-negative.
-	- [ ] Ensure test-procedure works with false-positive.
+	- [x] Anything-but-Mocha integration.
+	- [x] Ensure test-procedure works with false-negative.
+	- [x] Ensure test-procedure works with false-positive.
 	- [ ] Cases.
 		- [x] 200-status HTTP server.
 		- [ ] 50% success-status HTTP server.
