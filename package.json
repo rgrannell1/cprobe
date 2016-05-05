@@ -4,7 +4,7 @@
   "description": "",
   "author": "Ryan Grannell <r.grannell2@gmail.com>",
   "scripts": {
-    "test": "node tests/commons/runner.js"
+    "test": "node tests/cases/test-emitter.js"
   },
   "bin": {
     "cprobe": "src/cli/cprobe.js"
