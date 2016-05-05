@@ -150,10 +150,11 @@ cases.falsePositive = ( ) => {
 	})
 	.catch(err => {
 
-		if (err.message.test(failMessage)) {
+		if (err.message.indexOf(failMessage) !== -1) {
 			console.error(`✓ cprobe ${message}`.green)
 		} else {
-
+			console.error(`✕ cprobe ${message}`.red)
+			process.exit(1)
 		}
 
 	})
