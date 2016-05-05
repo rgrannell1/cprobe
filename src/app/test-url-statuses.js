@@ -66,14 +66,12 @@ const testUrlStatus = (args, emitter, url) => {
 
 		connPromise.then(
 			connHandlers[url.protocol].resolve.bind({ }, emitter, url),
-			connHandlers[url.protocol].reject .bind({ }, emitter, url)
+			connHandlers[url.protocol].reject .bind({ }, emitter, url),
+			err => {
+				console.error(`Error while testing url: ${err.stack}`)
+				process.exit(1)
+			}
 		)
-		.catch(err => {
-
-			console.error(`internal error: ${err.stack}`)
-			process.exit(1)
-
-		})
 
 	}, args.interval)
 

@@ -6,6 +6,7 @@
 
 
 const is        = require('is')
+const colors    = require('colors')
 const events    = require('events')
 const constants = require('../../src/commons/constants')
 const expect    = require('expect.js')
@@ -15,13 +16,8 @@ const utils     = require('../commons/utils')
 
 
 
-const tests = { }
-
-tests.schema = summaries => {
-
-	tests.schema.properties(summaries)
-	tests.schema.types(summaries)
-
+const tests = {
+	schema: { }
 }
 
 tests.schema.properties = summaries => {
@@ -90,7 +86,6 @@ tests.schema.types = summaries => {
 tests.intervals = (start, intervals, summaries) => {
 
 	const elapsedMilliseconds = Date.now( ) - start
-
 	const expectedLength = intervals.indexOf(intervals.find(interval => interval > elapsedMilliseconds)) + 1
 
 	expect(summaries[0].summaries.length).to.be.within(expectedLength - 1, expectedLength)
@@ -101,36 +96,96 @@ tests.intervals = (start, intervals, summaries) => {
 
 
 
-describe('cprobe (healthy http server)', function ( ) {
+const cases = { }
 
-	const start = Date.now( )
+cases.falsePositive = ( ) => {
 
-	const caseDuration = 65 * 1000
-	const okaySender   = (_, res) => res.status(200).send('')
+	const message = "tests (false positive)"
 
-	it('has a fixed property / type schema.', function (done) {
+	utils.setup.http({
+		port:    6000,
+		timeout: 6 * 1000,
+		sender:  (_, res) => {
+			res.status(200).send('')
+		},
+		tests: [
+			( ) => {throw Error('deliberate failure.')}
+		]
+	})
+	.then(( ) => {
 
-		this.timeout(0)
 
-		utils.cprobeTestApp
-			.http(6000, caseDuration, okaySender)
-			.then( ({emitter, server}) => {
+		console.log(`✕ cprobe ${message}`.red)
+		console.error(err)
+		process.exit(1)
 
-				emitter.on(constants.events.summaries, summaries => {
 
-					tests.schema(summaries)
-					tests.schema(summaries)
-					tests.intervals(start, constants.intervals, summaries)
+	})
+	.catch(err => {
+		console.log(`✓ cprobe ${message}`.green)
+	})
 
-				})
+}
 
-				setTimeout(( ) => server.close(done), caseDuration)
+cases.healthyServer = ( ) => {
 
-			})
-			.catch(err => {
-				console.error(err.message)
-			})
+	const message = "cprobe (healthy http-server)"
 
-		})
+	utils.setup.http({
+		port:    6010,
+		timeout: 6 * 1000,
+		sender:  (_, res) => {
+			res.status(200).send('')
+		},
+		tests: [
+			tests.schema.properties,
+			tests.schema.types,
+			tests.intervals.bind({ }, Date.now( ), constants.intervals)
+		]
+	})
+	.then(( ) => {
+		console.log(`✓ cprobe ${message}`.green)
+	})
+	.catch(err => {
 
-})
+		console.log(`✕ cprobe ${message}`.red)
+		console.error(err)
+		process.exit(1)
+
+	})
+
+}
+
+cases.halfHealthyServer = ( ) => {
+
+	const message = "cprobe (50%-healthy http-server)"
+
+	utils.setup.http({
+		port:    6020,
+		timeout: 6 * 1000,
+		sender:  (_, res) => {
+			res.status(Math.random( ) > 0.5 ? 200 : 404).send('')
+		},
+		tests: [
+			tests.schema.properties,
+			tests.schema.types,
+			tests.intervals.bind({ }, Date.now( ), constants.intervals)
+		]
+	})
+	.then(( ) => {
+		console.log(`✓ cprobe ${message}`.green)
+	})
+	.catch(err => {
+		console.log(`✕ cprobe ${message}`.red)
+		console.error(err)
+	})
+
+}
+
+
+
+
+
+cases.falsePositive( )
+cases.healthyServer( )
+cases.halfHealthyServer( )

@@ -45,7 +45,15 @@ cprobe https://google.com ssh://fake@test.com:24
 	- [ ] Line-delimited JSON output.
 	- [ ] Carriage-retun human-readable output.
 	- [ ] Ncurses human-readable output.
+- [ ] Library value.
+	- [ ] Event-emitter of summary statistics.
 - [ ] Allow the connection interval to be specified.
+- [ ] Testing.
+	- [ ] Ensure test-procedure works with false-negative.
+	- [ ] Ensure test-procedure works with false-positive.
+	- [ ] Test cases.
+		- [ ]
+	- [ ] Test summary
 
 ### License
 

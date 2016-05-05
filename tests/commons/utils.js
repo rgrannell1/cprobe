@@ -11,6 +11,11 @@ const express   = require('express')
 
 
 
+const utils = { }
+
+
+
+
 
 const mockServers = { }
 
@@ -54,13 +59,53 @@ cprobeTestApp.http = (port, timeout, sender) => {
 
 }
 
-cprobeTestApp.ssh = (port, onSummary) => {
+
+
+
+
+const setup = { }
+
+setup.http = ({port, timeout, sender, tests}) => {
+
+	return new Promise((resolve, reject) => {
+
+		mockServers.http(port, sender)
+		.then(server => {
+
+			const emitter = cprobe({
+				json: true,
+				urls: [
+					`http://localhost:${port}`
+				],
+				interval: 0.1 * 1000,
+				version:  false,
+				display:  false,
+				timeout:  timeout
+			})
+
+			return {emitter, server}
+
+		})
+		.then( ({emitter, server}) => {
+
+			emitter.on(constants.events.summaries, summaries => {
+				tests.forEach(test => test(summaries))
+			})
+
+			setTimeout(( ) => server.close(resolve), timeout)
+
+		})
+		.catch(reject)
+
+	})
 
 }
 
 
 
 
+
 module.exports = {
-	cprobeTestApp
+	cprobeTestApp,
+	setup
 }
