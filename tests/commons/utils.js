@@ -89,7 +89,13 @@ setup.http = ({port, timeout, sender, tests}) => {
 		.then( ({emitter, server}) => {
 
 			emitter.on(constants.events.summaries, summaries => {
-				tests.forEach(test => test(summaries))
+
+				try {
+					tests.forEach(test => test(summaries))
+				} catch (err) {
+					reject(err)
+				}
+
 			})
 
 			setTimeout(( ) => server.close(resolve), timeout)

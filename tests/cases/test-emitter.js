@@ -129,7 +129,8 @@ cases.negative = ( ) => {
 
 cases.falsePositive = ( ) => {
 
-	const message = "tests (false positive)"
+	const message     = "tests (false positive)"
+	const failMessage = "deliberate failure"
 
 	utils.setup.http({
 		port:    6000,
@@ -138,7 +139,7 @@ cases.falsePositive = ( ) => {
 			res.status(200).send('')
 		},
 		tests: [
-			( ) => { throw Error('deliberate failure.') }
+			( ) => { throw Error(failMessage) }
 		]
 	})
 	.then(( ) => {
@@ -148,8 +149,13 @@ cases.falsePositive = ( ) => {
 
 	})
 	.catch(err => {
-		console.error(`✓ cprobe ${message}`.green)
-		console.error(err)
+
+		if (err.message.test(failMessage)) {
+			console.error(`✓ cprobe ${message}`.green)
+		} else {
+
+		}
+
 	})
 
 }
