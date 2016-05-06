@@ -65,7 +65,7 @@ schemas.http = ( ) => {
 		type: 'array',
 		children: {
 			intervalMs: {
-				type: 'string',
+				type: 'number',
 			},
 			stats
 		}

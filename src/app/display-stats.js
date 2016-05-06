@@ -58,8 +58,8 @@ displayStats.json = urlSummaries => {
 displayStats.human.responseTimeMs = urlSummary => {
 
 	return urlSummary.summaries
-		.map(data => is.number(data.stats.responseTimeMs)
-			? data.stats.responseTimeMs + 'ms'
+		.map(data => is.number(data.stats.responseTimeMs.median)
+			? data.stats.responseTimeMs.median + 'ms'
 			: 'unknown')
 		.join(' | ')
 
@@ -89,7 +89,7 @@ displayStats.human.successByTime = urlSummary => {
 				return successPercent >= constants.threshholds.successPercentage[level]
 			} ).colour
 
-			const date        = utils.displayTime(timeData.interval / constants.units.millisecondsPerSecond)
+			const date        = utils.displayTime(timeData.intervalMs / constants.units.millisecondsPerSecond)
 			const successRate = utils.percentify(successPercent)[healthColour]
 
 			return `${date} ${successRate}`
