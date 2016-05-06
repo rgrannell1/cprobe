@@ -37,6 +37,7 @@
 	- [x] Line-delimited JSON output.
 	- [x] Carriage-retun human-readable output.
 	- [ ] Ncurses human-readable output.
+	- [ ] Seperate code into model-view pattern.
 - [x] Allow the connection interval to be specified.
 - [x] Library value.
 	- [x] Event-emitter of summary statistics.
