@@ -38,7 +38,7 @@ displayStats.json = urlSummaries => {
 
 			return [
 				urlSummary.url.url,
-				'	response time ' + displayStats.human.responseTime(urlSummary),
+				'	response time ' + displayStats.human.responseTimeMs(urlSummary),
 				'	attempts ' + displayStats.human.totalUrlCount(urlSummary),
 				'	' + displayStats.human.successByTime(urlSummary)
 			]
@@ -55,11 +55,11 @@ displayStats.json = urlSummaries => {
 
 }
 
-displayStats.human.responseTime = urlSummary => {
+displayStats.human.responseTimeMs = urlSummary => {
 
 	return urlSummary.summaries
-		.map(data => is.number(data.stats.responseTime)
-			? data.stats.responseTime + 'ms'
+		.map(data => is.number(data.stats.responseTimeMs)
+			? data.stats.responseTimeMs + 'ms'
 			: 'unknown')
 		.join(' | ')
 

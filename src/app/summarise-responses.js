@@ -49,15 +49,15 @@ summariseResponses.stats.count = responses => {
 	return responses.length
 }
 
-summariseResponses.stats.responseTime = responses => {
+summariseResponses.stats.responseTimeMs = responses => {
 
-	const responseTimes = responses
-		.map(res => res.metrics.responseTime)
+	const responseTimesMs = responses
+		.map(res => res.metrics.responseTimeMs)
 		.filter(res => res !== null)
 
-	return responseTimes.length === 0
+	return responseTimesMs.length === 0
 		? null
-		: utils.medianOf(responseTimes)
+		: utils.medianOf(responseTimesMs)
 
 }
 

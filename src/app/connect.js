@@ -19,7 +19,7 @@ connect.http = connData => {
 
 	return new Promise((resolve, reject) => {
 
-		const start = process.hrtime( )
+		const start = Date.now( )
 
 		httpRequest(connData.url, (err, res, body) => {
 
@@ -27,7 +27,7 @@ connect.http = connData => {
 				return reject(err)
 			}
 
-			res.responseTime = parseInt(process.hrtime(start)[1] / constants.units.nanosecondsPerMillisecond, 10)
+			res.responseTimeMs = Date.now( ) - start
 
 			resolve({res, body})
 

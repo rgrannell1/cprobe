@@ -20,8 +20,8 @@ responseStats.http = (event, response) => {
 		url:     response.url,
 		time:    response.time,
 		metrics: {
-			responseTime: urlResponse
-				? urlResponse.responseTime
+			responseTimeMs: urlResponse
+				? urlResponse.responseTimeMs
 				: null,
 			status:  urlResponse
 				? urlResponse.statusCode
