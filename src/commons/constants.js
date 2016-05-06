@@ -5,6 +5,9 @@
 
 
 var constants = {
+	defaults: {
+		protocol: 'http'
+	},
 	escapeSequences: {
 		lineUp:     '\x1b[A',
 		lineDelete: '\x1b[K'

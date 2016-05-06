@@ -34,8 +34,6 @@ callApp.preprocess.urls = urls => {
 		process.exit(1)
 	}
 
-	return urls
-
 }
 
 callApp.preprocess.interval = interval => {

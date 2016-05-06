@@ -65,9 +65,15 @@ const cprobe = rawArgs => {
 
 cprobe.preprocess = rawArgs => {
 
-	rawArgs.urls = rawArgs.urls.map((url, ith) => {
-		return Object.assign(parseUrl(url), {id: ith})
-	})
+	rawArgs.urls = rawArgs.urls
+		.map(url => {
+			return constants.regex.protocol.test(url)
+				? url
+				: `${constants.defaults.protocol}://${url}`
+		})
+		.map((url, ith) => {
+			return Object.assign(parseUrl(url), {id: ith})
+		})
 
 	return rawArgs
 

@@ -16,37 +16,9 @@ const expect    = require('expect.js')
 const utils     = require('../commons/utils')
 
 
-/*
-
-expect(summary.interval).to.be.a('string')
-expect(summary.stats).to.be.a('object')
-
-if (!is.null(summary.stats.count)) {
-	expect(summary.stats.count).to.be.a('number')
-}
-
-if (!is.null(summary.stats.responseTimeMs)) {
-	expect(summary.stats.responseTimeMs).to.be.a('number')
-}
-
-if (!is.null(summary.stats.successPercentage)) {
-	expect(summary.stats.successPercentage).to.be.a('number')
-}
-
-if (!is.null(summary.stats.responseCodes)) {
-
-	expect(summary.stats.responseCodes).to.be.an('array')
-	summary.stats.responseCodes.forEach(codes => {
-
-		expect(codes.value).to.be.a('number')
-		expect(codes.count).to.be.a('number')
-
-	})
-
-}
 
 
-*/
+
 
 const schemas = { }
 
@@ -140,12 +112,7 @@ tests.responseTime = (expected, leeway, summaries) => {
 
 }
 
-tests.stdout = summaries => {
-
-	// proxy
-
-
-}
+tests.stdout = summaries => { }
 
 
 

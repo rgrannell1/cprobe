@@ -92,7 +92,7 @@ utils.cprobeTestApp.http = (port, timeout, sender) => {
 			const emitter = cprobe({
 				json: true,
 				urls: [
-					`http://localhost:${port}`
+					`localhost:${port}`
 				],
 				interval: 0.1 * 1000,
 				version:  false,
@@ -122,7 +122,7 @@ utils.setup.http = ({port, timeout, sender, tests}) => {
 			const emitter = cprobe({
 				json: true,
 				urls: [
-					`http://localhost:${port}`
+					`localhost:${port}`
 				],
 				interval: 0.1 * 1000,
 				version:  false,
