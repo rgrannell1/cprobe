@@ -6,13 +6,59 @@
 
 const constants = require('../../src/commons/constants')
 const cprobe    = require('../../src/app/cprobe')
-const events     = require('events')
+const is        = require('is')
+const events    = require('events')
 const express   = require('express')
 
 
 
 
 const utils = { }
+
+
+
+
+
+utils.assertSchema = (schema, value) => {
+
+	Object.keys(schema).forEach(property => {
+
+		if (property === 'type') {
+
+			is.always[schema.type](value)
+
+		} else if (property === 'children') {
+
+			if (is.array(value)) {
+
+				value.forEach(elem => {
+					utils.assertSchema(schema.children, elem)
+				})
+
+			} else if (is.object(value)) {
+
+				Object.keys(value).forEach(innerProp => {
+					utils.assertSchema(schema, value[innerProp])
+
+				})
+
+			}
+
+
+		} else {
+
+			if (!value.hasOwnProperty(property)) {
+				throw Error(`missing property ${property}:\nvalue ${JSON.stringify(property)}`)
+			} else {
+				utils.assertSchema(schema[property], value[property])
+			}
+
+		}
+
+	})
+
+}
+
 
 
 
@@ -36,9 +82,9 @@ mockServers.http = (port, sender) => {
 
 }
 
-const cprobeTestApp = { }
+utils.cprobeTestApp = { }
 
-cprobeTestApp.http = (port, timeout, sender) => {
+utils.cprobeTestApp.http = (port, timeout, sender) => {
 
 	return mockServers.http(port, sender)
 		.then(server => {
@@ -64,9 +110,9 @@ cprobeTestApp.http = (port, timeout, sender) => {
 
 
 
-const setup = { }
+utils.setup = { }
 
-setup.http = ({port, timeout, sender, tests}) => {
+utils.setup.http = ({port, timeout, sender, tests}) => {
 
 	return new Promise((resolve, reject) => {
 
@@ -112,7 +158,4 @@ setup.http = ({port, timeout, sender, tests}) => {
 
 
 
-module.exports = {
-	cprobeTestApp,
-	setup
-}
+module.exports = utils

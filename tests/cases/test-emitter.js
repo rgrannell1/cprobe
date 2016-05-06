@@ -16,6 +16,99 @@ const expect    = require('expect.js')
 const utils     = require('../commons/utils')
 
 
+/*
+
+expect(summary.interval).to.be.a('string')
+expect(summary.stats).to.be.a('object')
+
+if (!is.null(summary.stats.count)) {
+	expect(summary.stats.count).to.be.a('number')
+}
+
+if (!is.null(summary.stats.responseTimeMs)) {
+	expect(summary.stats.responseTimeMs).to.be.a('number')
+}
+
+if (!is.null(summary.stats.successPercentage)) {
+	expect(summary.stats.successPercentage).to.be.a('number')
+}
+
+if (!is.null(summary.stats.responseCodes)) {
+
+	expect(summary.stats.responseCodes).to.be.an('array')
+	summary.stats.responseCodes.forEach(codes => {
+
+		expect(codes.value).to.be.a('number')
+		expect(codes.count).to.be.a('number')
+
+	})
+
+}
+
+
+*/
+
+const schemas = { }
+
+schemas.http = ( ) => {
+
+	const url = {
+		id: {
+			type: 'number'
+		},
+		protocol: {
+			type: 'string'
+		},
+		url: {
+			type: 'string'
+		}
+	}
+
+	const stats = {
+		successPercentage: {
+			type: 'number'
+		},
+		count: {
+			type: 'number'
+		},
+		responseTimeMs: {
+			type: 'number'
+		},
+		responseCodes: {
+			type: 'array',
+			children: {
+				value: {
+					type: 'number'
+				},
+				count: {
+					type: 'number'
+				}
+			}
+		}
+	}
+
+	const summaries = {
+		type: 'array',
+		children: {
+			interval: {
+				type: 'string',
+			},
+			stats
+		}
+	}
+
+	return {
+		type: 'array',
+		children: {
+			url:       url,
+			summaries: summaries
+		}
+	}
+
+}
+
+schemas.https = schemas.http
+
 
 
 
@@ -24,85 +117,8 @@ const tests = {
 	schema: { }
 }
 
-tests.schema.properties = summaries => {
-
-	expect(summaries).to.have.length(1)
-
-	const summary = summaries[0]
-
-	;['summaries', 'url']
-		.forEach(prop => expect(summary).to.have.property(prop))
-
-	;['id', 'protocol', 'url']
-		.forEach(prop => expect(summary.url).to.have.property(prop))
-
-	summary.summaries.forEach(timeSummary => {
-
-		expect(timeSummary).to.have.property('interval')
-
-		;['interval', 'stats']
-			.forEach(prop => expect(timeSummary).to.have.property(prop))
-
-		;['count', 'responseTimeMs', 'successPercentage', 'responseCodes']
-			.forEach(prop => expect(timeSummary.stats).to.have.property(prop))
-
-		timeSummary.stats.responseCodes.forEach(codes => {
-			;['value', 'count']
-				.forEach(prop => expect(codes).to.have.property(prop))
-		})
-
-
-	})
-
-}
-
-tests.schema.types = summaries => {
-
-	expect(summaries).to.be.an('array')
-
-	summaries.forEach(summary => {
-
-		expect(summary.summaries).to.be.an('array')
-
-		expect(summary.url).to.be.an('object')
-
-		expect(summary.url.id).to.be.a('number')
-		expect(summary.url.protocol).to.be.a('string')
-		expect(summary.url.url).to.be.a('string')
-
-		summary.summaries.forEach(summary => {
-
-			expect(summary.interval).to.be.a('string')
-			expect(summary.stats).to.be.a('object')
-
-			if (!is.null(summary.stats.count)) {
-				expect(summary.stats.count).to.be.a('number')
-			}
-
-			if (!is.null(summary.stats.responseTimeMs)) {
-				expect(summary.stats.responseTimeMs).to.be.a('number')
-			}
-
-			if (!is.null(summary.stats.successPercentage)) {
-				expect(summary.stats.successPercentage).to.be.a('number')
-			}
-
-			if (!is.null(summary.stats.responseCodes)) {
-
-				expect(summary.stats.responseCodes).to.be.an('array')
-				summary.stats.responseCodes.forEach(codes => {
-
-					expect(codes.value).to.be.a('number')
-					expect(codes.count).to.be.a('number')
-
-				})
-
-			}
-
-		})
-
-	})
-
+tests.schema = summaries => {
+	utils.assertSchema(schemas.http( ), summaries)
 }
 
 tests.intervals = (start, intervals, summaries) => {
@@ -212,8 +228,7 @@ cases.healthyServer = ( ) => {
 			res.status(200).send('')
 		},
 		tests: [
-			tests.schema.properties,
-			tests.schema.types,
+			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.stdout
 		]
@@ -242,8 +257,7 @@ cases.halfHealthyServer = ( ) => {
 			res.status(Math.random( ) > 0.5 ? 200 : 404).send('')
 		},
 		tests: [
-			tests.schema.properties,
-			tests.schema.types,
+			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.stdout
 		]
@@ -279,8 +293,7 @@ cases.slowRespondServer = ( ) => {
 
 		},
 		tests: [
-			tests.schema.properties,
-			tests.schema.types,
+			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.responseTime.bind({ }, 1000, 0.1)
 		]
