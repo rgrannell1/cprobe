@@ -49,6 +49,7 @@
 		- [x] 200-status HTTP server.
 		- [x] 50% success-status HTTP server.
 		- [x] Test environmental variable proxy server.
+		- [ ] Test slow-responding server.
 		- [ ] Success test-TCP server. 
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
@@ -58,6 +59,7 @@
 		- [x] Test summary interval length over time.
 		- [ ] Test summary value legitimacy.
 		- [ ] Test interval lengths.
+		- [ ] Test response times.
 	- [ ] Output testing.
 		- [ ] Implement standard-output capture.
 		- [ ] Reparse line-delimited JSON reparsing.
