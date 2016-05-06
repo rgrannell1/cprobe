@@ -43,8 +43,14 @@ tests.schema.properties = summaries => {
 		;['interval', 'stats']
 			.forEach(prop => expect(timeSummary).to.have.property(prop))
 
-		;['count', 'responseTimeMs', 'successPercentage']
+		;['count', 'responseTimeMs', 'successPercentage', 'responseCodes']
 			.forEach(prop => expect(timeSummary.stats).to.have.property(prop))
+
+		timeSummary.stats.responseCodes.forEach(codes => {
+			;['value', 'count']
+				.forEach(prop => expect(codes).to.have.property(prop))
+		})
+
 
 	})
 
@@ -79,6 +85,18 @@ tests.schema.types = summaries => {
 
 			if (!is.null(summary.stats.successPercentage)) {
 				expect(summary.stats.successPercentage).to.be.a('number')
+			}
+
+			if (!is.null(summary.stats.responseCodes)) {
+
+				expect(summary.stats.responseCodes).to.be.an('array')
+				summary.stats.responseCodes.forEach(codes => {
+
+					expect(codes.value).to.be.a('number')
+					expect(codes.count).to.be.a('number')
+
+				})
+
 			}
 
 		})

@@ -53,7 +53,15 @@ stats.responseTimeMs = responses => {
 }
 
 stats.responseCodes = responses => {
-	return null
+
+	const responseStatusCodes = responses
+		.map(res => res.metrics.status)
+		.filter(res => res !== null)
+
+	return responseStatusCodes.length === 0
+		? null
+		: utils.tabulate(responseStatusCodes)
+
 }
 
 
