@@ -6,6 +6,7 @@
 
 const constants = require('../../src/commons/constants')
 const cprobe    = require('../../src/app/cprobe')
+const events     = require('events')
 const express   = require('express')
 
 

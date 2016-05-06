@@ -29,6 +29,10 @@ Description:
 
 	cprobe works supports common protocols (http, https, ssh, tcp).
 
+Proxy settings:
+
+
+
 Options:
 	-j, --json                    Display the connection statuses as line-delimited JSON.
 	-i <NUM>, --interval <NUM>    The probe interval [default: 5].
@@ -39,7 +43,6 @@ Arguments:
 	                              The folloring protocols are currently supported:
 	                              * http
 	                              * https
-
 
 Authors:
 	${constants.packageJson.author}

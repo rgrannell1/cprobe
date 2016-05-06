@@ -89,7 +89,7 @@ displayStats.human.successByTime = urlSummary => {
 				return successPercent >= constants.threshholds.successPercentage[level]
 			} ).colour
 
-			const date        = utils.displayTime(timeData.interval)
+			const date        = utils.displayTime(timeData.interval / constants.units.millisecondsPerSecond)
 			const successRate = utils.percentify(successPercent)[healthColour]
 
 			return `${date} ${successRate}`

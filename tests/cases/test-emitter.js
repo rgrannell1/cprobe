@@ -7,10 +7,14 @@
 
 const is        = require('is')
 const colors    = require('colors')
+const fs        = require('fs');
 const events    = require('events')
+const readline  = require('readline')
+const path      = require('path')
 const constants = require('../../src/commons/constants')
 const expect    = require('expect.js')
 const utils     = require('../commons/utils')
+
 
 
 
@@ -92,15 +96,33 @@ tests.intervals = (start, intervals, summaries) => {
 
 }
 
+tests.responseTime = (expected, leeway, summaries) => {
+
+	summaries.forEach(summary => {
+		summary.summaries.forEach(urlSummary => {
+			expect(urlSummary.stats.responseTime).to.be.within(expected - (leeway * expected), expected + (leeway * expected))
+		})
+	})
+
+}
+
+tests.stdout = summaries => {
+
+	// proxy
+
+
+}
+
+
 
 
 
 
 const cases = { }
 
-cases.negative = ( ) => {
+cases.certainSuccess = ( ) => {
 
-	const message = "tests (false negative)"
+	const message = "tests (certain success)"
 
 	utils.setup.http({
 		port:    5900,
@@ -113,13 +135,13 @@ cases.negative = ( ) => {
 	.then(( ) => {
 
 
-		console.error(`✓ cprobe ${message}`.green)
+		console.error(`✓ ${message}`.green)
 
 
 	})
 	.catch(err => {
 
-		console.error(`✕ cprobe ${message}`.red)
+		console.error(`✕ ${message}`.red)
 		console.error(err)
 		process.exit(1)
 
@@ -127,9 +149,9 @@ cases.negative = ( ) => {
 
 }
 
-cases.falsePositive = ( ) => {
+cases.certainFailure = ( ) => {
 
-	const message     = "tests (false positive)"
+	const message     = "tests (certain failure)"
 	const failMessage = "deliberate failure"
 
 	utils.setup.http({
@@ -144,16 +166,16 @@ cases.falsePositive = ( ) => {
 	})
 	.then(( ) => {
 
-		console.error(`✕ cprobe ${message}`.red)
+		console.error(`✕ ${message}`.red)
 		process.exit(1)
 
 	})
 	.catch(err => {
 
 		if (err.message.indexOf(failMessage) !== -1) {
-			console.error(`✓ cprobe ${message}`.green)
+			console.error(`✓ ${message}`.green)
 		} else {
-			console.error(`✕ cprobe ${message}`.red)
+			console.error(`✕ ${message}`.red)
 			process.exit(1)
 		}
 
@@ -174,15 +196,16 @@ cases.healthyServer = ( ) => {
 		tests: [
 			tests.schema.properties,
 			tests.schema.types,
-			tests.intervals.bind({ }, Date.now( ), constants.intervals)
+			tests.intervals.bind({ }, Date.now( ), constants.intervals),
+			tests.stdout
 		]
 	})
 	.then(( ) => {
-		console.error(`✓ cprobe ${message}`.green)
+		console.error(`✓ ${message}`.green)
 	})
 	.catch(err => {
 
-		console.error(`✕ cprobe ${message}`.red)
+		console.error(`✕ ${message}`.red)
 		console.error(err)
 		process.exit(1)
 
@@ -203,15 +226,53 @@ cases.halfHealthyServer = ( ) => {
 		tests: [
 			tests.schema.properties,
 			tests.schema.types,
-			tests.intervals.bind({ }, Date.now( ), constants.intervals)
+			tests.intervals.bind({ }, Date.now( ), constants.intervals),
+			tests.stdout
 		]
 	})
 	.then(( ) => {
-		console.error(`✓ cprobe ${message}`.green)
+		console.error(`✓ ${message}`.green)
 	})
 	.catch(err => {
 
-		console.error(`✕ cprobe ${message}`.red)
+		console.error(`✕ ${message}`.red)
+		console.error(err)
+		process.exit(1)
+
+	})
+
+}
+
+cases.slowRespondServer = ( ) => {
+
+	const message = "cprobe (slow-healthy http-server)"
+
+	utils.setup.http({
+		port:    6030,
+		timeout: 6 * 1000,
+		sender:  (_, res) => {
+
+			setTimeout(( ) => {
+
+				res.status(Math.random( ) > 0.5 ? 200 : 404).send('')
+
+			}, 1000)
+
+
+		},
+		tests: [
+			tests.schema.properties,
+			tests.schema.types,
+			tests.intervals.bind({ }, Date.now( ), constants.intervals),
+			tests.responseTime.bind({ }, 1000, 0.1)
+		]
+	})
+	.then(( ) => {
+		console.error(`✓ ${message}`.green)
+	})
+	.catch(err => {
+
+		console.error(`✕ ${message}`.red)
 		console.error(err)
 		process.exit(1)
 
@@ -223,7 +284,8 @@ cases.halfHealthyServer = ( ) => {
 
 
 
-cases.negative( )
-cases.falsePositive( )
+cases.certainSuccess( )
+cases.certainFailure( )
 cases.healthyServer( )
 cases.halfHealthyServer( )
+cases.slowRespondServer( )
