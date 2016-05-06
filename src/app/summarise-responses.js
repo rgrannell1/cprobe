@@ -42,13 +42,37 @@ stats.count = responses => {
 
 stats.responseTimeMs = responses => {
 
+	const responseTimeStats = { }
+
 	const responseTimesMs = responses
 		.map(res => res.metrics.responseTimeMs)
 		.filter(res => res !== null)
 
-	return responseTimesMs.length === 0
+
+
+
+
+
+	responseTimeStats.median = responseTimesMs.length === 0
 		? null
 		: utils.medianOf(responseTimesMs)
+
+	responseTimeStats.min = responseTimesMs.length === 0
+		? null
+		: Math.min.apply([ ], responseTimesMs)
+
+	responseTimeStats.max = responseTimesMs.length === 0
+		? null
+		: Math.max.apply([ ], responseTimesMs)
+
+	responseTimeStats.intervals = [
+		utils.atInterval(0.05, responseTimesMs),
+		utils.atInterval(0.25, responseTimesMs),
+		utils.atInterval(0.75, responseTimesMs),
+		utils.atInterval(0.95, responseTimesMs)
+	]
+
+	return responseTimeStats
 
 }
 
@@ -140,7 +164,7 @@ const summariseTimeInterval = (responses) => {
 				.groupBy(res => res.interval)
 				.unzipKeys( )
 				.map( ([interval, responses]) => ({
-				 	interval,
+				 	intervalMs: parseInt(interval, 10),
 				 	stats: summariseResponses(responses)
 				}) )
 

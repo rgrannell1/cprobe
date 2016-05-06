@@ -44,7 +44,9 @@ schemas.http = ( ) => {
 			type: 'number'
 		},
 		responseTimeMs: {
-			type: 'number'
+			'median': {
+				type: 'number'
+			}
 		},
 		responseCodes: {
 			type: 'array',
@@ -62,7 +64,7 @@ schemas.http = ( ) => {
 	const summaries = {
 		type: 'array',
 		children: {
-			interval: {
+			intervalMs: {
 				type: 'string',
 			},
 			stats
@@ -106,7 +108,7 @@ tests.responseTime = (expected, leeway, summaries) => {
 
 	summaries.forEach(summary => {
 		summary.summaries.forEach(urlSummary => {
-			expect(urlSummary.stats.responseTimeMs).to.be.within(expected - (leeway * expected), expected + (leeway * expected))
+			expect(urlSummary.stats.responseTimeMs.median).to.be.within(expected - (leeway * expected), expected + (leeway * expected))
 		})
 	})
 
@@ -127,7 +129,7 @@ cases.certainSuccess = ( ) => {
 
 	utils.setup.http({
 		port:    5900,
-		timeout: 6 * 1000,
+		timeout: 60 * 1000,
 		sender:  (_, res) => {
 			res.status(200).send('')
 		},
@@ -157,7 +159,7 @@ cases.certainFailure = ( ) => {
 
 	utils.setup.http({
 		port:    6000,
-		timeout: 6 * 1000,
+		timeout: 60 * 1000,
 		sender:  (_, res) => {
 			res.status(200).send('')
 		},
@@ -190,7 +192,7 @@ cases.healthyServer = ( ) => {
 
 	utils.setup.http({
 		port:    6010,
-		timeout: 6 * 1000,
+		timeout: 60 * 1000,
 		sender:  (_, res) => {
 			res.status(200).send('')
 		},
@@ -219,7 +221,7 @@ cases.halfHealthyServer = ( ) => {
 
 	utils.setup.http({
 		port:    6020,
-		timeout: 6 * 1000,
+		timeout: 60 * 1000,
 		sender:  (_, res) => {
 			res.status(Math.random( ) > 0.5 ? 200 : 404).send('')
 		},
@@ -248,7 +250,7 @@ cases.slowRespondServer = ( ) => {
 
 	utils.setup.http({
 		port:    6030,
-		timeout: 6 * 1000,
+		timeout: 60 * 1000,
 		sender:  (_, res) => {
 
 			setTimeout(( ) => {

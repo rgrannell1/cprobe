@@ -19,6 +19,20 @@ utils.percentify = num => {
 	return Math.floor(num * 100) + '%'
 }
 
+utils.atInterval = (percent, nums) => {
+
+	if (nums.length === 0) {
+		throw Error('cannot find atInterval of empty array.')
+	}
+
+	const sorted = nums.sort((num0, num1) => {
+		return parseInt(num0, 10) - parseInt(num1, 10)
+	})
+
+	return sorted[Math.floor(percent * sorted.length)]
+
+}
+
 utils.displayTime = seconds => {
 
 	return seconds < constants.units.secondsPerMinute
