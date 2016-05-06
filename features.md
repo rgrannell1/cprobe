@@ -19,11 +19,11 @@
 		- [ ] Request-times.
 	- [x] HTTP.
 		- [x] Request-times.
-		- [ ] Status codes.
+		- [x] Status codes.
 		- [ ] Agent obsfucation.
 	- [x] HTTPS.
 		- [x] Request-times.
-		- [ ] Status codes.
+		- [x] Status codes.
 		- [ ] Agent obsfucation.
 	- [ ] SSH.
 		- [ ] Request-times.
@@ -49,7 +49,7 @@
 		- [x] 200-status HTTP server.
 		- [x] 50% success-status HTTP server.
 		- [x] Test environmental variable proxy server.
-		- [ ] Test slow-responding server.
+		- [x] Test slow-responding server.
 		- [ ] Success test-TCP server.
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
