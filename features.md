@@ -28,11 +28,11 @@
 	- [ ] SSH.
 		- [ ] Request-times.
 - [ ] Proxy options.
-	- [ ] TCP 
+	- [ ] TCP
 	- [ ] UDP
 	- [ ] HTTP
 	- [ ] HTTPS
-	- [ ] SSH 
+	- [ ] SSH
 - [x] Output.
 	- [x] Line-delimited JSON output.
 	- [x] Carriage-retun human-readable output.
@@ -48,7 +48,7 @@
 	- [ ] Cases.
 		- [x] 200-status HTTP server.
 		- [x] 50% success-status HTTP server.
-		- [ ] Success test-TCP server. 
+		- [ ] Success test-TCP server.
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
 	- [ ] Event summary test.
