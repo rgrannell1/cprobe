@@ -59,7 +59,7 @@
 		- [x] Test summary interval length over time.
 		- [ ] Test summary value legitimacy.
 		- [ ] Test interval lengths.
-		- [ ] Test response times.
+		- [x] Test response times.
 	- [ ] Output testing.
 		- [ ] Implement standard-output capture.
 		- [ ] Reparse line-delimited JSON reparsing.
