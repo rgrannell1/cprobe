@@ -24,32 +24,23 @@ const assignTimeInterval = (intervals, response) => {
 
 }
 
-const summariseResponses = responses => {
 
-	const summary = { }
 
-	Object.keys(summariseResponses.stats).forEach(statName => {
-		summary[statName] = summariseResponses.stats[statName](responses)
-	})
 
-	return summary
+const stats = { }
 
-}
-
-summariseResponses.stats = { }
-
-summariseResponses.stats.successPercentage = responses => {
+stats.successPercentage = responses => {
 
 	const isSuccess = res => res.event === constants.events.connSuccess
 	return responses.filter(isSuccess).length / responses.length
 
 }
 
-summariseResponses.stats.count = responses => {
+stats.count = responses => {
 	return responses.length
 }
 
-summariseResponses.stats.responseTimeMs = responses => {
+stats.responseTimeMs = responses => {
 
 	const responseTimesMs = responses
 		.map(res => res.metrics.responseTimeMs)
@@ -60,6 +51,65 @@ summariseResponses.stats.responseTimeMs = responses => {
 		: utils.medianOf(responseTimesMs)
 
 }
+
+stats.responseCodes = responses => {
+	return null
+}
+
+
+
+
+
+
+const summariseResponses = responses => {
+
+	summariseResponses.precond(responses)
+
+	const protocol = responses[0].url.protocol
+	const summary  = { }
+
+	Object.keys(stats).forEach(statName => {
+		summary[statName] = summariseResponses.stats[protocol][statName](responses)
+	})
+
+	return summary
+
+}
+
+summariseResponses.precond = responses => {
+
+	responses.reduce((expectedProtocol, response) => {
+
+		if (expectedProtocol !== response.url.protocol) {
+			throw Error(`${expectedProtocol} vs ${response.url.protocol}`)
+		}
+
+		return expectedProtocol
+
+	}, responses[0].url.protocol)
+
+}
+
+
+
+
+
+
+summariseResponses.stats = {
+	http: {
+		successPercentage: stats.successPercentage,
+		count:             stats.count,
+		responseTimeMs:    stats.responseTimeMs,
+		responseCodes:     stats.responseCodes
+	},
+	https: {
+		successPercentage: stats.successPercentage,
+		count:             stats.count,
+		responseTimeMs:    stats.responseTimeMs,
+		responseCodes:     stats.responseCodes
+	}
+}
+
 
 
 

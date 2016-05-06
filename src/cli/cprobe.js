@@ -36,6 +36,10 @@ Proxy settings:
 Options:
 	-j, --json                    Display the connection statuses as line-delimited JSON.
 	-i <NUM>, --interval <NUM>    The probe interval [default: 5].
+	--http-proxy  <STR>           The https proxy to use. Proxy settings are automatically detected from the
+	                                  environmental variables 'HTTP_PROXY', 'HTTPS_PROXY', and 'NO_PROXY', but
+	                                  supplied proxy options are treated with higher-priority.
+	--https-proxy <STR>           The https proxy to use. See above.
 	-h, --help                    Display this documentation.
 	--version                     Display the package version.
 Arguments:

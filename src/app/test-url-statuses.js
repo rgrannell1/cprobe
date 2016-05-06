@@ -71,7 +71,7 @@ const testUrlStatus = (args, emitter, url) => {
 				console.error(`Error while testing url: ${err.stack}`)
 				process.exit(1)
 			}
-		)
+		).catch(err => console.error(err))
 
 	}, args.interval)
 
