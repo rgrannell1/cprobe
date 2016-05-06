@@ -57,6 +57,7 @@
 		- [x] Test summary types.
 		- [x] Test summary interval length over time.
 		- [ ] Test summary value legitimacy.
+		- [ ] Test interval lengths.
 	- [ ] Output testing.
 		- [ ] Implement standard-output capture.
 		- [ ] Reparse line-delimited JSON reparsing.
