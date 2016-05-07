@@ -6,7 +6,6 @@
 
 const constants = require('../commons/constants')
 const app       = require('../app/cprobe')
-const parseUrl  = require('../app/parse-url')
 
 
 

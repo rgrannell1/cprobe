@@ -6,7 +6,6 @@
 
 
 const constants = require('../commons/constants')
-const utils     = require('../commons/utils')
 const stats     = require('../stats/stats')
 
 
@@ -92,20 +91,20 @@ const summariseTimeInterval = (responses) => {
 		.map(assignTimeInterval.bind({ }, constants.intervals))
 		.groupBy(res => res.url.id)
 		.unzipKeys( )
-		.map( ([id, responses]) => {
+		.map( ([_, urlResponses]) => {
 
 			// summarise results each 30s, 1m time interval.
 
-			const summaries = responses
+			const summaries = urlResponses
 				.groupBy(res => res.interval)
 				.unzipKeys( )
-				.map( ([interval, responses]) => ({
+				.map( ([interval, urlTimeResponses]) => ({
 				 	intervalMs: parseInt(interval, 10),
-				 	stats: summariseResponses(responses)
+				 	stats: summariseResponses(urlTimeResponses)
 				}) )
 
 			return {
-				url: responses[0].url,
+				url: urlResponses[0].url,
 				summaries
 			}
 

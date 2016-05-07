@@ -5,7 +5,6 @@
 
 
 
-const constants   = require('../commons/constants')
 const httpRequest = require('request')
 const sshRequest  = require('ssh2').Client
 

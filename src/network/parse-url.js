@@ -5,7 +5,6 @@
 
 const URL       = require('url')
 const constants = require('../commons/constants')
-const utils     = require('../commons/utils')
 
 
 

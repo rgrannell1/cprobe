@@ -6,7 +6,6 @@
 
 
 const is        = require('is')
-const colors    = require('colors')
 const utils     = require('../commons/utils')
 const constants = require('../commons/constants')
 
@@ -85,7 +84,7 @@ displayStats.human.successByTime = urlSummary => {
 		.map(timeData => {
 
 			const successPercent = timeData.stats.successPercentage
-			const healthColour   = healthColours.find( ({level, colour}) => {
+			const healthColour   = healthColours.find( ({level, _}) => {
 				return successPercent >= constants.threshholds.successPercentage[level]
 			} ).colour
 

@@ -16,9 +16,6 @@ const measureResponse = (event, response) => {
 
 measureResponse.http = (event, response) => {
 
-	const urlResponse = response.res
-	const urlBody     = response.body
-
 	const resMetrics     = { }
 	const resMetricNames = ['responseTimeMs', 'statusCode', 'bodyLength']
 

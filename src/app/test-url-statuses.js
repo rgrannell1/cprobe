@@ -7,7 +7,7 @@
 
 const events    = require('events')
 
-const connect   = require('../app/connect')
+const connect   = require('../network/connect')
 const constants = require('../commons/constants')
 
 

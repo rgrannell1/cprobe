@@ -6,7 +6,6 @@
 
 
 
-const colors    = require('colors')
 const constants = require('../commons/constants')
 
 

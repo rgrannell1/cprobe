@@ -6,10 +6,9 @@
 
 const constants          = require('../commons/constants')
 const measureResponse    = require('../metrics/measure-response')
-const parseUrl           = require('../app/parse-url')
+const parseUrl           = require('../network/parse-url')
 const summariseResponses = require('../stats/summarise-reponses')
 const testUrlStatuses    = require('../app/test-url-statuses')
-const utils              = require('../commons/utils')
 const displayStats       = require('../app/display-stats')
 
 
