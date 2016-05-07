@@ -5,9 +5,9 @@
 
 
 const constants          = require('../commons/constants')
-const extractResponseStats      = require('../app/response-stats')
+const measureResponse    = require('../metrics/measure-response')
 const parseUrl           = require('../app/parse-url')
-const summariseResponses = require('../app/summarise-responses')
+const summariseResponses = require('../stats/summarise-reponses')
 const testUrlStatuses    = require('../app/test-url-statuses')
 const utils              = require('../commons/utils')
 const displayStats       = require('../app/display-stats')
@@ -36,7 +36,7 @@ const cprobe = rawArgs => {
 		connStatuses
 		.on(event, response => {
 
-			responseStats.push(extractResponseStats(event, response))
+			responseStats.push(measureResponse(event, response))
 
 			const summaries = summariseResponses(responseStats)
 
