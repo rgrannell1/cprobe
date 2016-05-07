@@ -6,6 +6,7 @@
 
 
 const is        = require('is')
+const view      = require('../display/view')
 const utils     = require('../commons/utils')
 const constants = require('../commons/constants')
 

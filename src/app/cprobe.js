@@ -9,7 +9,9 @@ const measureResponse    = require('../metrics/measure-response')
 const parseUrl           = require('../network/parse-url')
 const summariseResponses = require('../stats/summarise-reponses')
 const testUrlStatuses    = require('../app/test-url-statuses')
-const displayStats       = require('../app/display-stats')
+//const displayStats       = require('../display/display-stats')
+const view               = require('../display/view')
+const model              = require('../display/model')
 
 
 
@@ -48,9 +50,9 @@ const cprobe = rawArgs => {
 
 				const displayMode = args.json
 					? 'json'
-					: 'human'
+					: 'carraigeReturn'
 
-				displayStats[displayMode](summaries)
+				view[displayMode](model[displayMode](summaries))
 
 			}
 
