@@ -51,6 +51,7 @@
 		- [x] 50% success-status HTTP server.
 		- [x] Test environmental variable proxy server.
 		- [x] Test slow-responding server.
+		- [ ] Test guaranteed-timeout server.
 		- [ ] Success test-TCP server.
 		- [ ] Success test-UDP server.
 		- [ ] Success test-SSH server.
