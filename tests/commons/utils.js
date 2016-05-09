@@ -13,7 +13,20 @@ const express   = require('express')
 
 
 
-const utils = { }
+const utils = {
+	constants: {
+		timeouts: {
+			http: 30 * 1000,
+		},
+		intervals: {
+			probe: 0.1 * 1000
+		}
+	}
+}
+
+
+
+
 
 
 
@@ -25,21 +38,40 @@ utils.assertSchema = (schema, value) => {
 
 		if (property === 'type') {
 
-			is.always[schema.type](value)
+			if (is.array(schema.type)) {
+
+				const match = schema.type.filter(possible => is[possible](value))
+
+				if (match.length === 0) {
+					throw `value did not have type in list ${schema.type.join(', ')}`
+				}
+
+			} else {
+
+				is.always[schema.type](value)
+
+			}
 
 		} else if (property === 'children') {
 
 			if (is.array(value)) {
 
-				value.forEach(elem => {
-					utils.assertSchema(schema.children, elem)
+				value.forEach((elem, ith) => {
+					try {
+						utils.assertSchema(schema.children, elem)
+					} catch (err) {
+						err.message = `${ith} child element is invalid: ${err.message}`
+					}
 				})
 
 			} else if (is.object(value)) {
 
 				Object.keys(value).forEach(innerProp => {
-					utils.assertSchema(schema, value[innerProp])
-
+					try {
+						utils.assertSchema(schema, value[innerProp])
+					} catch (err) {
+						err.message = `${innerProp} is invalid: ${err.message}`
+					}
 				})
 
 			}
@@ -50,7 +82,11 @@ utils.assertSchema = (schema, value) => {
 			if (!value.hasOwnProperty(property)) {
 				throw Error(`missing property ${property}:\nvalue ${JSON.stringify(property)}`)
 			} else {
-				utils.assertSchema(schema[property], value[property])
+				try {
+					utils.assertSchema(schema[property], value[property])
+				} catch (err) {
+					err.message = `${property} is invalid: ${err.message}`
+				}
 			}
 
 		}
@@ -78,6 +114,8 @@ mockServers.http = (port, sender) => {
 				resolve(server)
 			})
 
+		server.timeout = utils.constants.timeouts.http
+
 	})
 
 }
@@ -94,7 +132,7 @@ utils.cprobeTestApp.http = (port, timeout, sender) => {
 				urls: [
 					`localhost:${port}`
 				],
-				interval: 0.1 * 1000,
+				interval: constants.intervals.probe,
 				version:  false,
 				display:  false,
 				timeout:  timeout
@@ -102,6 +140,9 @@ utils.cprobeTestApp.http = (port, timeout, sender) => {
 
 			return {emitter, server}
 
+		})
+		.catch(err => {
+			console.err(err.message)
 		})
 
 }
@@ -124,7 +165,7 @@ utils.setup.http = ({port, timeout, sender, tests}) => {
 				urls: [
 					`localhost:${port}`
 				],
-				interval: 0.1 * 1000,
+				interval: constants.intervals.probe,
 				version:  false,
 				display:  false,
 				timeout:  timeout

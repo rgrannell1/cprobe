@@ -4,7 +4,9 @@
 
 
 
-var constants = {
+const millisecondsPerSecond = 1000
+
+const constants = {
 	defaults: {
 		protocol: 'http'
 	},
@@ -18,11 +20,11 @@ var constants = {
 		summaries:   'summaries'
 	},
 	intervals: [
-		30   * 1000,
-		60   * 1000,
-		300  * 1000,
-		600  * 1000,
-		1800 * 1000
+		30   * millisecondsPerSecond,
+		60   * millisecondsPerSecond,
+		300  * millisecondsPerSecond,
+		600  * millisecondsPerSecond,
+		1800 * millisecondsPerSecond
 	],
 	packageJson: require('../../package'),
 	regex: {
@@ -33,10 +35,14 @@ var constants = {
 			failure: 0,
 			warning: 0.95,
 			success: 1
+		},
+		timeouts: {
+			http:  30 * millisecondsPerSecond,
+			https: 30 * millisecondsPerSecond
 		}
 	},
 	units: {
-		millisecondsPerSecond:     1000,
+		millisecondsPerSecond,
 		nanosecondsPerMillisecond: 10000000,
 		secondsPerMinute:          60
 	}

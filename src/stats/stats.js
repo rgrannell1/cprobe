@@ -5,6 +5,7 @@
 
 
 
+const is        = require('is')
 const constants = require('../commons/constants')
 const utils     = require('../commons/utils')
 
@@ -36,7 +37,7 @@ stats.responseTimeMs = responses => {
 
 	const responseTimesMs = responses
 		.map(res => res.metrics.responseTimeMs)
-		.filter(res => res !== null)
+		.filter(is.number)
 
 
 
@@ -55,12 +56,14 @@ stats.responseTimeMs = responses => {
 		? null
 		: Math.max.apply([ ], responseTimesMs)
 
-	responseTimeStats.intervals = [
-		utils.atInterval(0.05, responseTimesMs),
-		utils.atInterval(0.25, responseTimesMs),
-		utils.atInterval(0.75, responseTimesMs),
-		utils.atInterval(0.95, responseTimesMs)
-	]
+	responseTimeStats.intervals = responseTimesMs.length === 0
+		? [null, null, null, null]
+		: [
+			utils.atInterval(0.05, responseTimesMs),
+			utils.atInterval(0.25, responseTimesMs),
+			utils.atInterval(0.75, responseTimesMs),
+			utils.atInterval(0.95, responseTimesMs)
+		]
 
 	return responseTimeStats
 

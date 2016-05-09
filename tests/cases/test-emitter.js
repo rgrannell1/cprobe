@@ -7,81 +7,35 @@
 
 const is        = require('is')
 const colors    = require('colors')
-const fs        = require('fs');
-const events    = require('events')
-const readline  = require('readline')
 const path      = require('path')
 const constants = require('../../src/commons/constants')
 const expect    = require('expect.js')
 const utils     = require('../commons/utils')
+const schemas   = require('../schemas/schemas')
 
 
 
 
+const report = {
+	success: message => {
+		console.error(`✓ ${message}`.green)
+	},
+	failure: (err, message)  => {
 
+		console.error(`✕ ${message}`.red)
+		console.error(err)
+		process.exit(1)
 
-const schemas = { }
-
-schemas.http = ( ) => {
-
-	const url = {
-		id: {
-			type: 'number'
-		},
-		protocol: {
-			type: 'string'
-		},
-		url: {
-			type: 'string'
-		}
 	}
-
-	const stats = {
-		successPercentage: {
-			type: 'number'
-		},
-		count: {
-			type: 'number'
-		},
-		responseTimeMs: {
-			'median': {
-				type: 'number'
-			}
-		},
-		responseCodes: {
-			type: 'array',
-			children: {
-				value: {
-					type: 'number'
-				},
-				count: {
-					type: 'number'
-				}
-			}
-		}
-	}
-
-	const summaries = {
-		type: 'array',
-		children: {
-			intervalMs: {
-				type: 'number',
-			},
-			stats
-		}
-	}
-
-	return {
-		type: 'array',
-		children: {
-			url:       url,
-			summaries: summaries
-		}
-	}
-
 }
 
-schemas.https = schemas.http
+
+
+
+
+const testConstants = {
+	duration: 60 * 1000
+}
 
 
 
@@ -144,7 +98,7 @@ cases.certainSuccess = ( ) => {
 
 	utils.setup.http({
 		port:    5900,
-		timeout: 60 * 1000,
+		timeout: testConstants.duration,
 		sender:  (_, res) => {
 			res.status(200).send('')
 		},
@@ -152,17 +106,11 @@ cases.certainSuccess = ( ) => {
 	})
 	.then(( ) => {
 
-
-		console.error(`✓ ${message}`.green)
-
+		report.success(message)
 
 	})
 	.catch(err => {
-
-		console.error(`✕ ${message}`.red)
-		console.error(err)
-		process.exit(1)
-
+		report.failure(err, message)
 	})
 
 }
@@ -174,7 +122,7 @@ cases.certainFailure = ( ) => {
 
 	utils.setup.http({
 		port:    6000,
-		timeout: 60 * 1000,
+		timeout: testConstants.duration,
 		sender:  (_, res) => {
 			res.status(200).send('')
 		},
@@ -191,7 +139,7 @@ cases.certainFailure = ( ) => {
 	.catch(err => {
 
 		if (err.message.indexOf(failMessage) !== -1) {
-			console.error(`✓ ${message}`.green)
+			report.success(message)
 		} else {
 			console.error(`✕ ${message}`.red)
 			process.exit(1)
@@ -207,7 +155,7 @@ cases.healthyServer = ( ) => {
 
 	utils.setup.http({
 		port:    6010,
-		timeout: 60 * 1000,
+		timeout: testConstants.duration,
 		sender:  (_, res) => {
 			res.status(200).send('')
 		},
@@ -218,29 +166,30 @@ cases.healthyServer = ( ) => {
 		]
 	})
 	.then(( ) => {
-		console.error(`✓ ${message}`.green)
+		report.success(message)
 	})
 	.catch(err => {
-
-		console.error(`✕ ${message}`.red)
-		console.error(err)
-		process.exit(1)
-
+		report.failure(err, message)
 	})
 
 }
 
 cases.halfHealthyServer = ( ) => {
 
-	const message = "cprobe (50%-healthy http-server)"
+	const message  = "cprobe (50%-healthy http-server)"
+	var modCounter = 0
 
 	utils.setup.http({
 		port:    6020,
-		timeout: 60 * 1000,
+		timeout: testConstants.duration,
 		sender:  (_, res) => {
-			if (Math.random( ) > 0.5) {
-				res.send('')
+
+			if (modCounter % 2 === 0) {
+				res.status(200).send('')
 			}
+
+			++modCounter
+
 		},
 		tests: [
 			tests.schema,
@@ -250,47 +199,40 @@ cases.halfHealthyServer = ( ) => {
 		]
 	})
 	.then(( ) => {
-		console.error(`✓ ${message}`.green)
+		report.success(message)
 	})
 	.catch(err => {
-
-		console.error(`✕ ${message}`.red)
-		console.error(err)
-		process.exit(1)
-
+		report.failure(err, message)
 	})
 
 }
 
-cases.slowRespondServer = ( ) => {
+cases.slowHealthyServer = ( ) => {
 
+	const delay   = 5 * 1000
 	const message = "cprobe (slow-healthy http-server)"
 
 	utils.setup.http({
 		port:    6030,
-		timeout: 60 * 1000,
+		timeout: testConstants.duration,
 		sender:  (_, res) => {
 
 			setTimeout(( ) => {
 				res.status(200).send('')
-			}, 1000)
+			}, delay)
 
 		},
 		tests: [
 			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
-			tests.responseTime.bind({ }, 1000, 0.1)
+			tests.responseTime.bind({ }, delay, 0.2 * delay)
 		]
 	})
 	.then(( ) => {
-		console.error(`✓ ${message}`.green)
+		report.success(message)
 	})
 	.catch(err => {
-
-		console.error(`✕ ${message}`.red)
-		console.error(err)
-		process.exit(1)
-
+		report.failure(err, message)
 	})
 
 }
@@ -303,4 +245,4 @@ cases.certainSuccess( )
 cases.certainFailure( )
 cases.healthyServer( )
 cases.halfHealthyServer( )
-cases.slowRespondServer( )
+cases.slowHealthyServer( )

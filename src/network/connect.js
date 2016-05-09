@@ -7,6 +7,7 @@
 
 const httpRequest = require('request')
 const sshRequest  = require('ssh2').Client
+const constants   = require('../commons/constants')
 
 
 
@@ -16,11 +17,13 @@ const connect = { }
 
 connect.http = connData => {
 
-	return new Promise((resolve, reject) => {
+	const connection = new Promise((resolve, reject) => {
 
 		const start = Date.now( )
 
-		httpRequest(connData.url, (err, res, body) => {
+		httpRequest({
+			url: connData.url
+		}, (err, res, body) => {
 
 			if (err) {
 				return reject(err)
@@ -33,6 +36,11 @@ connect.http = connData => {
 		})
 
 	})
+
+	return Promise.race([
+		connection,
+		new Promise((_, reject) => setTimeout(reject, constants.thresholds.timeouts.http))
+	])
 
 }
 
