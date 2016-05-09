@@ -41,6 +41,7 @@ const displayTable = (indent, separator, strs) => {
 
 
 
+var previousLines = 0
 
 view.carraigeReturn = urlSummaries => {
 
@@ -62,17 +63,19 @@ view.carraigeReturn = urlSummaries => {
 
 	})
 
+	utils.terminal.eraseLines(previousLines)
+	previousLines = displayLines.length
+
 	console.log(displayLines.join('\n'))
 
 }
 
 view.carraigeReturn['response time'] = urlSummary => {
 
-	return urlSummary.summaries
+	return displayTable(0, '|', urlSummary.summaries
 		.map(data => is.number(data.stats.responseTimeMs.median)
 			? data.stats.responseTimeMs.median + 'ms'
-			: 'unknown')
-		.join(' | ')
+			: 'unknown'))
 
 }
 

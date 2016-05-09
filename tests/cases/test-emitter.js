@@ -114,6 +114,21 @@ tests.responseTime = (expected, leeway, summaries) => {
 
 }
 
+tests.successRate = (expected, leeway, count, summaries) => {
+
+	summaries.forEach(summary => {
+		summary.summaries.forEach(urlSummary => {
+
+			if (urlSummary.stats.count >= count) {
+				expect(urlSummary.stats.successPercentage).to.be.within(expected - (leeway * expected), expected + (leeway * expected))
+			}
+
+
+		})
+	})
+
+}
+
 tests.stdout = summaries => { }
 
 
@@ -223,11 +238,14 @@ cases.halfHealthyServer = ( ) => {
 		port:    6020,
 		timeout: 60 * 1000,
 		sender:  (_, res) => {
-			res.status(Math.random( ) > 0.5 ? 200 : 404).send('')
+			if (Math.random( ) > 0.5) {
+				res.send('')
+			}
 		},
 		tests: [
 			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
+			tests.successRate.bind({ }, 0.5, 0.1, 100),
 			tests.stdout
 		]
 	})
@@ -254,11 +272,8 @@ cases.slowRespondServer = ( ) => {
 		sender:  (_, res) => {
 
 			setTimeout(( ) => {
-
-				res.status(Math.random( ) > 0.5 ? 200 : 404).send('')
-
+				res.status(200).send('')
 			}, 1000)
-
 
 		},
 		tests: [
