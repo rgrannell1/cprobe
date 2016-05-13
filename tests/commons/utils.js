@@ -28,7 +28,11 @@ const utils = {
 			try {
 				fn.apply([ ], arguments)
 			} catch (err) {
-				err.message = `${message} ${err.message}`
+
+				if (err.message) {
+					err.message = `${message} ${err.message}`
+				}
+
 				throw err
 			}
 

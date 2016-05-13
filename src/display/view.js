@@ -5,9 +5,14 @@
 
 
 
+
+const colours   = require('colors')
 const is        = require('is')
 const utils     = require('../commons/utils')
 const constants = require('../commons/constants')
+
+
+
 
 
 
@@ -51,15 +56,9 @@ view.carraigeReturn = urlSummaries => {
 
 		displayLines.push(urlSummary.header)
 
-		Object.keys(urlSummary.fields).forEach(field => {
-
-			displayLines.push( displayKey(
-				field, 4, view.carraigeReturn[field](urlSummary)) )
-
-		})
-
-		displayLines.push(displayTable(
-			' | ', 4, view.carraigeReturn.summaries(urlSummary)) )
+		displayLines.push(view.carraigeReturn.responseTime(urlSummary))
+		displayLines.push(view.carraigeReturn.attempts(urlSummary))
+		displayLines.push(view.carraigeReturn.successRate(urlSummary))
 
 	})
 
@@ -70,47 +69,43 @@ view.carraigeReturn = urlSummaries => {
 
 }
 
-view.carraigeReturn['response time'] = urlSummary => {
+view.carraigeReturn.responseTime = urlSummary => {
 
-	return displayTable(0, '|', urlSummary.summaries
-		.map(data => is.number(data.stats.responseTimeMs.median)
-			? data.stats.responseTimeMs.median + 'ms'
-			: 'unknown'))
+	const entries = urlSummary.fields.responseTime.map( ({intervalMs, value, level}) => {
+		return `${value}ms`
+	})
+
+	return displayKey('response time', 4, entries.join(' | '))
 
 }
 
 view.carraigeReturn.attempts = urlSummary => {
-
-	return urlSummary.summaries
-		.map(data => data.stats.count)
-		.reduce((acc, count) => acc + count, 0)
-
+	return displayKey('attempts', 4, urlSummary.fields.attempts)
 }
-
-view.carraigeReturn.summaries = urlSummary => {
+view.carraigeReturn.successRate = urlSummary => {
 
 	const healthColours = [
 		{level: 'success', colour: 'green'},
 		{level: 'warning', colour: 'yellow'},
 		{level: 'failure', colour: 'red'}
 	]
+	const entries = urlSummary.fields.successRate.map( ({intervalMs, successPercent, level}) => {
 
-	return urlSummary.summaries
-		.map(timeData => {
+		const colour = healthColours.find(({level, colour}) => {
+			return successPercent >= constants.thresholds.successPercentage[level]
+		}).colour
 
-			const successPercent = timeData.stats.successPercentage
-			const healthColour   = healthColours.find( ({level, _}) => {
-				return successPercent >= constants.thresholds.successPercentage[level]
-			} ).colour
+		const displayInterval       = utils.displayTime(intervalMs / constants.units.millisecondsPerSecond)
+		const displaySuccessPercent = (successPercent + '')[colour]
 
-			const interval    = utils.displayTime(timeData.intervalMs / constants.units.millisecondsPerSecond)
-			const successRate = utils.percentify(successPercent)[healthColour]
+		return `${displayInterval} ${displaySuccessPercent}`
 
-			return `${interval} ${successRate}`
+	} )
 
-		})
+	return '    ' + entries.join(' | ')
 
 }
+
 
 
 
