@@ -56,8 +56,8 @@ view.carraigeReturn = urlSummaries => {
 
 		displayLines.push(urlSummary.header)
 
-		displayLines.push(view.carraigeReturn.responseTime(urlSummary))
 		displayLines.push(view.carraigeReturn.attempts(urlSummary))
+		displayLines.push(view.carraigeReturn.responseTime(urlSummary))
 		displayLines.push(view.carraigeReturn.successRate(urlSummary))
 
 	})
@@ -72,7 +72,7 @@ view.carraigeReturn = urlSummaries => {
 view.carraigeReturn.responseTime = urlSummary => {
 
 	const entries = urlSummary.fields.responseTime.map( ({intervalMs, value, level}) => {
-		return `${value}ms`
+		return value ? `${value}ms` : 'unknown'
 	})
 
 	return displayKey('response time', 4, entries.join(' | '))
@@ -96,7 +96,7 @@ view.carraigeReturn.successRate = urlSummary => {
 		}).colour
 
 		const displayInterval       = utils.displayTime(intervalMs / constants.units.millisecondsPerSecond)
-		const displaySuccessPercent = (successPercent + '')[colour]
+		const displaySuccessPercent = utils.percentify(successPercent)[colour]
 
 		return `${displayInterval} ${displaySuccessPercent}`
 
