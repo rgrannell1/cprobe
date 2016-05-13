@@ -5,12 +5,9 @@ cprobe is a primarily interactive tool for testing connections to provided URLs.
 
 - replace manual CURL testing during installation / reconfiguration.
 - test and measure network reliability.
+- gauge the quality and speed of a public network.
 
-cprobe works supports common protocols (http, https, ssh).
-
-
-
-
+cprobe supports common protocols (http, https, ssh).
 
 ### Usage
 
