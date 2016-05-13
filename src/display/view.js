@@ -100,7 +100,7 @@ view.carraigeReturn.summaries = urlSummary => {
 
 			const successPercent = timeData.stats.successPercentage
 			const healthColour   = healthColours.find( ({level, _}) => {
-				return successPercent >= constants.threshholds.successPercentage[level]
+				return successPercent >= constants.thresholds.successPercentage[level]
 			} ).colour
 
 			const interval    = utils.displayTime(timeData.intervalMs / constants.units.millisecondsPerSecond)

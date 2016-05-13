@@ -7,11 +7,11 @@
 
 const is        = require('is')
 const colors    = require('colors')
-const path      = require('path')
 const constants = require('../../src/commons/constants')
 const expect    = require('expect.js')
 const utils     = require('../commons/utils')
 const schemas   = require('../schemas/schemas')
+
 
 
 
@@ -34,7 +34,8 @@ const report = {
 
 
 const testConstants = {
-	duration: 60 * 1000
+	duration: 3 * 1000,
+	startTime: Date.now( )
 }
 
 
@@ -45,20 +46,20 @@ const tests = {
 	schema: { }
 }
 
-tests.schema = summaries => {
+tests.schema = utils.label('# schema:', summaries => {
 	utils.assertSchema(schemas.http( ), summaries)
-}
+})
 
-tests.intervals = (start, intervals, summaries) => {
+tests.intervals = utils.label('# intervals:', (start, intervals, summaries) => {
 
 	const elapsedMilliseconds = Date.now( ) - start
 	const expectedLength = intervals.indexOf(intervals.find(interval => interval > elapsedMilliseconds)) + 1
 
 	expect(summaries[0].summaries.length).to.be.within(expectedLength - 1, expectedLength)
 
-}
+})
 
-tests.responseTime = (expected, leeway, summaries) => {
+tests.responseTime = utils.label('# response-time:', (expected, leeway, summaries) => {
 
 	summaries.forEach(summary => {
 		summary.summaries.forEach(urlSummary => {
@@ -66,21 +67,26 @@ tests.responseTime = (expected, leeway, summaries) => {
 		})
 	})
 
-}
+})
 
-tests.successRate = (expected, leeway, count, summaries) => {
+{
+	let rates = [ ]
 
-	summaries.forEach(summary => {
-		summary.summaries.forEach(urlSummary => {
+	utils.label('# success rate:', tests.rollingSuccessRate = (expected, leeway, summaries) => {
 
-			if (urlSummary.stats.count >= count) {
-				expect(urlSummary.stats.successPercentage).to.be.within(expected - (leeway * expected), expected + (leeway * expected))
-			}
+		summaries.forEach(summary => {
+			summary.summaries.forEach(urlSummary => {
 
+				rates.push(urlSummary.stats.successPercentage)
 
+				const meanRate = rates.reduce((acc, rate) => acc + rate, 0) / rates.length
+
+				expect(meanRate).to.be.within(expected - (leeway * expected), expected + (leeway * expected))
+
+			})
 		})
-	})
 
+	})
 }
 
 tests.stdout = summaries => { }
@@ -92,40 +98,44 @@ tests.stdout = summaries => { }
 
 const cases = { }
 
-cases.certainSuccess = ( ) => {
+cases.certainSuccess = port => {
 
 	const message = "tests (certain success)"
 
 	utils.setup.http({
-		port:    5900,
+		port,
 		timeout: testConstants.duration,
-		sender:  (_, res) => {
-			res.status(200).send('')
-		},
+		routes: [
+			{
+				method:     'get',
+				route:      '*',
+				middleware: (req, res) => res.status(200).send('')
+			}
+		],
 		tests: [( ) => { }]
 	})
-	.then(( ) => {
-
-		report.success(message)
-
-	})
-	.catch(err => {
-		report.failure(err, message)
-	})
+	.then(
+		( ) => report.success(message))
+	.catch(
+		err => report.failure(err, message))
 
 }
 
-cases.certainFailure = ( ) => {
+cases.certainFailure = port => {
 
 	const message     = "tests (certain failure)"
 	const failMessage = "deliberate failure"
 
 	utils.setup.http({
-		port:    6000,
+		port,
 		timeout: testConstants.duration,
-		sender:  (_, res) => {
-			res.status(200).send('')
-		},
+		routes: [
+			{
+				method:     'get',
+				route:      '*',
+				middleware: (req, res) => res.status(200).send('')
+			}
+		],
 		tests: [
 			( ) => { throw Error(failMessage) }
 		]
@@ -149,91 +159,95 @@ cases.certainFailure = ( ) => {
 
 }
 
-cases.healthyServer = ( ) => {
+cases.healthyServer = port => {
 
 	const message = "cprobe (healthy http-server)"
 
 	utils.setup.http({
-		port:    6010,
+		port,
 		timeout: testConstants.duration,
-		sender:  (_, res) => {
-			res.status(200).send('')
-		},
+		routes: [
+			{
+				method:     'get',
+				route:      '*',
+				middleware: (req, res) => {
+					res.status(200).send('')
+				}
+			}
+		],
 		tests: [
 			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.stdout
 		]
 	})
-	.then(( ) => {
-		report.success(message)
-	})
-	.catch(err => {
-		report.failure(err, message)
-	})
+	.then(( ) =>
+		report.success(message))
+	.catch(err =>
+		report.failure(err, message))
 
 }
 
-cases.halfHealthyServer = ( ) => {
+cases.noResponseServer = port => {
 
-	const message  = "cprobe (50%-healthy http-server)"
+	const message  = "cprobe (non-responsive http-server)"
 	var modCounter = 0
 
 	utils.setup.http({
-		port:    6020,
+		port,
 		timeout: testConstants.duration,
-		sender:  (_, res) => {
-
-			if (modCounter % 2 === 0) {
-				res.status(200).send('')
+		routes: [
+			{
+				method:     'all',
+				route:      '*',
+				middleware: ( ) => { }
 			}
-
-			++modCounter
-
-		},
+		],
 		tests: [
 			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
-			tests.successRate.bind({ }, 0.5, 0.1, 100),
+			tests.rollingSuccessRate.bind({ }, 0, 0),
 			tests.stdout
 		]
 	})
-	.then(( ) => {
-		report.success(message)
-	})
-	.catch(err => {
-		report.failure(err, message)
-	})
+	.then(( ) =>
+		report.success(message))
+	.catch(err =>
+		report.failure(err, message))
 
 }
 
-cases.slowHealthyServer = ( ) => {
+cases.slowHealthyServer = port => {
 
 	const delay   = 5 * 1000
 	const message = "cprobe (slow-healthy http-server)"
 
 	utils.setup.http({
-		port:    6030,
+		port,
 		timeout: testConstants.duration,
-		sender:  (_, res) => {
+		routes: [
+			{
+				method:     'get',
+				route:      '*',
+				middleware: (req, res) => {
 
-			setTimeout(( ) => {
-				res.status(200).send('')
-			}, delay)
+					setTimeout(( ) => {
+						res.status(200).send('')
+					}, delay)
 
-		},
+				}
+			}
+		],
 		tests: [
 			tests.schema,
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.responseTime.bind({ }, delay, 0.2 * delay)
 		]
 	})
-	.then(( ) => {
-		report.success(message)
-	})
-	.catch(err => {
-		report.failure(err, message)
-	})
+	.then(( ) =>
+		report.success(message))
+	.catch(err =>
+		report.failure(err, message))
 
 }
 
@@ -241,8 +255,8 @@ cases.slowHealthyServer = ( ) => {
 
 
 
-cases.certainSuccess( )
-cases.certainFailure( )
-cases.healthyServer( )
-cases.halfHealthyServer( )
-cases.slowHealthyServer( )
+cases.certainSuccess(6000)
+cases.certainFailure(6010)
+cases.healthyServer(6020)
+cases.slowHealthyServer(6040)
+cases.noResponseServer(6030)

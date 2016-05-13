@@ -21,6 +21,18 @@ const utils = {
 		intervals: {
 			probe: 0.1 * 1000
 		}
+	},
+	label: function (message, fn) {
+		return function ( ) {
+
+			try {
+				fn.apply([ ], arguments)
+			} catch (err) {
+				err.message = `${message} ${err.message}`
+				throw err
+			}
+
+		}
 	}
 }
 
@@ -102,17 +114,19 @@ utils.assertSchema = (schema, value) => {
 
 const mockServers = { }
 
-mockServers.http = (port, sender) => {
+mockServers.http = (port, routes) => {
 
 	return new Promise((resolve, reject) => {
 
-		const server = express( )
-			.get('*', (req, res) => {
-				sender(req, res)
-			})
-			.listen(port, ( ) => {
-				resolve(server)
-			})
+		const app = express( )
+
+		routes.forEach(route => {
+			app[route.method](route.route, route.middleware)
+		})
+
+		const server = app.listen(port, ( ) => {
+			resolve(server)
+		})
 
 		server.timeout = utils.constants.timeouts.http
 
@@ -122,9 +136,9 @@ mockServers.http = (port, sender) => {
 
 utils.cprobeTestApp = { }
 
-utils.cprobeTestApp.http = (port, timeout, sender) => {
+utils.cprobeTestApp.http = (port, timeout, routes) => {
 
-	return mockServers.http(port, sender)
+	return mockServers.http(port, routes)
 		.then(server => {
 
 			const emitter = cprobe({
@@ -132,7 +146,7 @@ utils.cprobeTestApp.http = (port, timeout, sender) => {
 				urls: [
 					`localhost:${port}`
 				],
-				interval: constants.intervals.probe,
+				interval: utils.constants.intervals.probe,
 				version:  false,
 				display:  false,
 				timeout:  timeout
@@ -153,11 +167,11 @@ utils.cprobeTestApp.http = (port, timeout, sender) => {
 
 utils.setup = { }
 
-utils.setup.http = ({port, timeout, sender, tests}) => {
+utils.setup.http = ({port, timeout, routes, tests}) => {
 
 	return new Promise((resolve, reject) => {
 
-		mockServers.http(port, sender)
+		mockServers.http(port, routes)
 		.then(server => {
 
 			const emitter = cprobe({
@@ -165,7 +179,7 @@ utils.setup.http = ({port, timeout, sender, tests}) => {
 				urls: [
 					`localhost:${port}`
 				],
-				interval: constants.intervals.probe,
+				interval: utils.constants.intervals.probe,
 				version:  false,
 				display:  false,
 				timeout:  timeout

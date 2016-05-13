@@ -40,6 +40,7 @@ connect.http = connData => {
 	return Promise.race([
 		connection,
 		new Promise((_, reject) => setTimeout(reject, constants.thresholds.timeouts.http))
+
 	])
 
 }

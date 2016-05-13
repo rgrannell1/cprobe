@@ -30,7 +30,7 @@ const constants = {
 	regex: {
 		protocol: /^([a-z]+):[\/]{2}/
 	},
-	threshholds: {
+	thresholds: {
 		successPercentage: {
 			failure: 0,
 			warning: 0.95,
