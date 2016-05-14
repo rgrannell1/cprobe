@@ -60,7 +60,7 @@
 		- [x] Test summary types.
 		- [x] Test summary interval length over time.
 		- [ ] Test summary value legitimacy.
-		- [ ] Test interval lengths.
+		- [ ] Test interval lengths vs time matching.
 		- [x] Test response times.
 	- [ ] Output testing.
 		- [ ] Implement standard-output capture.

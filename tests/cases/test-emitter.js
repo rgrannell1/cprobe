@@ -34,7 +34,7 @@ const report = {
 
 
 const testConstants = {
-	duration: 3 * 1000,
+	duration:  120 * 1000,
 	startTime: Date.now( )
 }
 
@@ -48,6 +48,25 @@ const tests = {
 
 tests.schema = utils.label('# schema:', summaries => {
 	utils.assertSchema(schemas.http( ), summaries)
+})
+
+tests.intervalsOverTime = utils.label('# recorded time vs actual time: ', (start, intervals, summaries) => {
+
+	summaries.forEach(summary => {
+
+		const actualLength    = summary.summaries.length
+		const elaspedTime     = Date.now( ) - start
+		const currentInterval = intervals.find(interval => elaspedTime < interval)
+		const expectedLength = intervals.indexOf(currentInterval) + 1
+
+		if (elaspedTime  > currentInterval + 2 * constants.units.millisecondsPerSecond) {
+
+			expect(actualLength).to.be.equal(expectedLength)
+
+		}
+
+	})
+
 })
 
 tests.intervals = utils.label('# intervals:', (start, intervals, summaries) => {
@@ -177,6 +196,7 @@ cases.healthyServer = port => {
 		],
 		tests: [
 			tests.schema,
+			tests.intervalsOverTime.bind({ }, Date.now( ), constants.intervals),
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.stdout
 		]
@@ -205,6 +225,7 @@ cases.noResponseServer = port => {
 		],
 		tests: [
 			tests.schema,
+			tests.intervalsOverTime.bind({ }, Date.now( ), constants.intervals),
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.rollingSuccessRate.bind({ }, 0, 0),
 			tests.stdout
@@ -240,6 +261,7 @@ cases.slowHealthyServer = port => {
 		],
 		tests: [
 			tests.schema,
+			tests.intervalsOverTime.bind({ }, Date.now( ), constants.intervals),
 			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.responseTime.bind({ }, delay, 0.2 * delay)
 		]
