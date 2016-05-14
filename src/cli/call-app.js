@@ -4,6 +4,7 @@
 
 
 
+const is        = require('is')
 const constants = require('../commons/constants')
 const app       = require('../app/cprobe')
 
@@ -38,6 +39,13 @@ callApp.preprocess.urls = urls => {
 }
 
 callApp.preprocess.interval = interval => {
+
+	if (is.null(interval) || is.undefined(interval)) {
+
+		console.error('error: "interval" cannot be null or undefined.')
+		process.exit(1)
+
+	}
 
 	const value = parseInt(interval, 10) * constants.units.millisecondsPerSecond
 

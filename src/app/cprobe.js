@@ -4,6 +4,8 @@
 
 
 
+const is                 = require('is')
+
 const constants          = require('../commons/constants')
 const measureResponse    = require('../metrics/measure-response')
 const parseUrl           = require('../network/parse-url')
@@ -65,6 +67,20 @@ const cprobe = rawArgs => {
 }
 
 cprobe.preprocess = rawArgs => {
+
+	if (is.null(rawArgs.interval) || is.undefined(rawArgs.interval)) {
+
+		console.error('error: "interval" cannot be null or undefined.')
+		process.exit(1)
+
+	}
+
+	if (rawArgs.interval === 0) {
+
+		console.error('error: "interval" cannot be zero.')
+		process.exit(1)
+
+	}
 
 	rawArgs.urls = rawArgs.urls
 		.map(url => {

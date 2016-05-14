@@ -37,7 +37,7 @@
 	- [x] Line-delimited JSON output.
 	- [x] Carriage-retun human-readable output.
 	- [ ] Ncurses human-readable output.
-	- [ ] Seperate code into model-view pattern.
+	- [x] Seperate code into model-view pattern.
 - [x] Allow the connection interval to be specified.
 - [x] Library value.
 	- [x] Event-emitter of summary statistics.
@@ -60,7 +60,7 @@
 		- [x] Test summary types.
 		- [x] Test summary interval length over time.
 		- [ ] Test summary value legitimacy.
-		- [ ] Test interval lengths vs time matching.
+		- [x] Test interval lengths vs time matching.
 		- [x] Test response times.
 	- [ ] Output testing.
 		- [ ] Implement standard-output capture.
