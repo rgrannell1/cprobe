@@ -69,15 +69,6 @@ tests.intervalsOverTime = utils.label('# recorded time vs actual time: ', (start
 
 })
 
-tests.intervals = utils.label('# intervals:', (start, intervals, summaries) => {
-
-	const elapsedMilliseconds = Date.now( ) - start
-	const expectedLength = intervals.indexOf(intervals.find(interval => interval > elapsedMilliseconds)) + 1
-
-	expect(summaries[0].summaries.length).to.be.within(expectedLength - 1, expectedLength)
-
-})
-
 tests.responseTime = utils.label('# response-time:', (expected, leeway, summaries) => {
 
 	summaries.forEach(summary => {
@@ -197,7 +188,6 @@ cases.healthyServer = port => {
 		tests: [
 			tests.schema,
 			tests.intervalsOverTime.bind({ }, Date.now( ), constants.intervals),
-			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.stdout
 		]
 	})
@@ -226,7 +216,6 @@ cases.noResponseServer = port => {
 		tests: [
 			tests.schema,
 			tests.intervalsOverTime.bind({ }, Date.now( ), constants.intervals),
-			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.rollingSuccessRate.bind({ }, 0, 0),
 			tests.stdout
 		]
@@ -262,7 +251,6 @@ cases.slowHealthyServer = port => {
 		tests: [
 			tests.schema,
 			tests.intervalsOverTime.bind({ }, Date.now( ), constants.intervals),
-			tests.intervals.bind({ }, Date.now( ), constants.intervals),
 			tests.responseTime.bind({ }, delay, 0.2 * delay)
 		]
 	})
