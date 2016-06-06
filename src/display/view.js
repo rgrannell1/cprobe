@@ -20,43 +20,21 @@ const view = { }
 
 
 
-const displayKey = (keyname, indent, value) => {
-
-	var indentSpace = ''
-
-	for (let ith = 0; ith < indent; ++ith) {
-		indentSpace += ' '
-	}
-
-	return `${indentSpace}${keyname}: ${value}`
-
-}
-
-const displayTable = (indent, separator, strs) => {
-
-	var indentSpace = ''
-
-	for (let ith = 0; ith < indent; ++ith) {
-		indentSpace += ' '
-	}
-
-	return `${indentSpace}${strs.join(separator)}`
-
-}
-
 
 
 var previousLines = 0
 
-view.carraigeReturn = urlSummaries => {
+view.carraigeReturn = urlSummaryModels => {
 
 	const displayLines = [ ]
 
-	urlSummaries.forEach(urlSummary => {
+	urlSummaryModels.forEach(urlSummary => {
 
 		displayLines.push(urlSummary.header)
 
 		displayLines.push(view.carraigeReturn.attempts(urlSummary))
+
+		displayLines.push(view.carraigeReturn.intervals(urlSummary))
 		displayLines.push(view.carraigeReturn.responseTime(urlSummary))
 		displayLines.push(view.carraigeReturn.successRate(urlSummary))
 
@@ -69,19 +47,55 @@ view.carraigeReturn = urlSummaries => {
 
 }
 
+view.carraigeReturn.intervals = urlSummary => {
+
+	// get the longest row label length.
+	const labelWidth = Object.keys(urlSummary.table).reduce((longestLength, currentKey) => {
+
+		const currentLabelLength = urlSummary.table[currentKey].reduce((longestLength, current) => {
+
+			return current.label && (current.label.length > longestLength)
+				? current.label.length
+				: longestLength
+
+		}, -Infinity)
+
+		return currentLabelLength > longestLength
+			? currentLabelLength
+			: longestLength
+
+	}, -Infinity)
+
+	const displayIntervals = urlSummary.table.intervals
+		.map(intervalMs => {
+			return utils.displayTime(intervalMs / constants.units.millisecondsPerSecond).toString( ).bold
+		})
+		.join(' | ')
+
+	var padding = ''
+
+	for (let ith = 0; ith < labelWidth; ++ith) {
+		padding += ' '
+	}
+
+	return `${padding}${displayIntervals}`
+
+}
+
 view.carraigeReturn.responseTime = urlSummary => {
 
-	const entries = urlSummary.fields.responseTime.map( ({intervalMs, value, level}) => {
+	const entries = urlSummary.table.responseTimes.map( ({intervalMs, value, level}) => {
 		return value ? `${value}ms` : 'unknown'
 	})
 
-	return displayKey('response time', 4, entries.join(' | '))
+	return `response time: ${ entries.join(' | ') }`
 
 }
 
 view.carraigeReturn.attempts = urlSummary => {
-	return displayKey('attempts', 4, urlSummary.fields.attempts)
+	return `attempts: ${urlSummary.fields.attempts}`
 }
+
 view.carraigeReturn.successRate = urlSummary => {
 
 	const healthColours = [
@@ -89,20 +103,19 @@ view.carraigeReturn.successRate = urlSummary => {
 		{level: 'warning', colour: 'yellow'},
 		{level: 'failure', colour: 'red'}
 	]
-	const entries = urlSummary.fields.successRate.map( ({intervalMs, successPercent, level}) => {
+	const entries = urlSummary.table.successRates.map( ({intervalMs, successPercent, level}) => {
 
 		const colour = healthColours.find(({level, colour}) => {
 			return successPercent >= constants.thresholds.successPercentage[level]
 		}).colour
 
-		const displayInterval       = utils.displayTime(intervalMs / constants.units.millisecondsPerSecond)
 		const displaySuccessPercent = utils.percentify(successPercent)[colour]
 
-		return `${displayInterval} ${displaySuccessPercent}`
+		return `${displaySuccessPercent}`
 
 	} )
 
-	return '    ' + entries.join(' | ')
+	return urlSummary.table.successRates[0].label + ' ' + entries.join(' | ')
 
 }
 
