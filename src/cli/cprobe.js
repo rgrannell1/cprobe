@@ -1,16 +1,8 @@
 #!/usr/bin/env node
 
-"use strict"
-
-
-
-
+'use strict'
 
 const constants = require('../commons/constants')
-
-
-
-
 
 const docs = `
 Name:
@@ -62,22 +54,11 @@ Version:
 	v${constants.packageJson.version}
 `
 
-
-
-
-const docopt  = require('docopt').docopt
+const docopt = require('docopt').docopt
 const callApp = require('../cli/call-app')
 
-
-
-
-
 const args = Object.assign({
-	'--display': true
+  '--display': true
 }, docopt(docs))
-
-
-
-
 
 callApp(args)

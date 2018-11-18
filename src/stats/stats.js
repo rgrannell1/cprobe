@@ -1,88 +1,60 @@
 
-"use strict"
+'use strict'
 
-
-
-
-
-const is        = require('is')
+const is = require('is')
 const constants = require('../commons/constants')
-const utils     = require('../commons/utils')
-
-
-
-
+const utils = require('../commons/utils')
 
 const stats = { }
 
-
-
-
-
-
 stats.successPercentage = responses => {
-
-	const isSuccess = res => res.event === constants.events.connSuccess
-	return responses.filter(isSuccess).length / responses.length
-
+  const isSuccess = res => res.event === constants.events.connSuccess
+  return responses.filter(isSuccess).length / responses.length
 }
 
 stats.count = responses => {
-	return responses.length
+  return responses.length
 }
 
 stats.responseTimeMs = responses => {
+  const responseTimeStats = { }
 
-	const responseTimeStats = { }
+  const responseTimesMs = responses
+    .map(res => res.metrics.responseTimeMs)
+    .filter(is.number)
 
-	const responseTimesMs = responses
-		.map(res => res.metrics.responseTimeMs)
-		.filter(is.number)
+  responseTimeStats.median = responseTimesMs.length === 0
+    ? null
+    : utils.medianOf(responseTimesMs)
 
+  responseTimeStats.min = responseTimesMs.length === 0
+    ? null
+    : Math.min.apply([ ], responseTimesMs)
 
+  responseTimeStats.max = responseTimesMs.length === 0
+    ? null
+    : Math.max.apply([ ], responseTimesMs)
 
+  responseTimeStats.intervals = responseTimesMs.length === 0
+    ? [null, null, null, null]
+    : [
+      utils.atInterval(0.05, responseTimesMs),
+      utils.atInterval(0.25, responseTimesMs),
+      utils.atInterval(0.75, responseTimesMs),
+      utils.atInterval(0.95, responseTimesMs)
+    ]
 
-
-
-	responseTimeStats.median = responseTimesMs.length === 0
-		? null
-		: utils.medianOf(responseTimesMs)
-
-	responseTimeStats.min = responseTimesMs.length === 0
-		? null
-		: Math.min.apply([ ], responseTimesMs)
-
-	responseTimeStats.max = responseTimesMs.length === 0
-		? null
-		: Math.max.apply([ ], responseTimesMs)
-
-	responseTimeStats.intervals = responseTimesMs.length === 0
-		? [null, null, null, null]
-		: [
-			utils.atInterval(0.05, responseTimesMs),
-			utils.atInterval(0.25, responseTimesMs),
-			utils.atInterval(0.75, responseTimesMs),
-			utils.atInterval(0.95, responseTimesMs)
-		]
-
-	return responseTimeStats
-
+  return responseTimeStats
 }
 
 stats.responseCodes = responses => {
+  const responseStatusCodes = responses
+    .map(res => res.metrics.statusCode)
+    .filter(res => res !== null)
 
-	const responseStatusCodes = responses
-		.map(res => res.metrics.statusCode)
-		.filter(res => res !== null)
-
-	return responseStatusCodes.length === 0
-		? null
-		: utils.tabulate(responseStatusCodes)
-
+  return responseStatusCodes.length === 0
+    ? null
+    : utils.tabulate(responseStatusCodes)
 }
-
-
-
-
 
 module.exports = stats
